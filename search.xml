@@ -19,6 +19,20 @@
 ]]></content>
   </entry>
   <entry>
+    <title>test paper1</title>
+    <url>/2020/04/29/test1/</url>
+    <content><![CDATA[<h2 id="paper-1"><a href="#paper-1" class="headerlink" title="paper 1"></a>paper 1</h2><p>aaaa</p>
+]]></content>
+      <categories>
+        <category>cat1</category>
+      </categories>
+      <tags>
+        <tag>tag1</tag>
+        <tag>tag2</tag>
+        <tag>another tag</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>test2</title>
     <url>/2020/04/29/test2/</url>
     <content><![CDATA[<h2 id="paper-2"><a href="#paper-2" class="headerlink" title="paper 2"></a>paper 2</h2><p>bbb</p>
@@ -29,20 +43,6 @@
       <tags>
         <tag>tag1</tag>
         <tag>another tag</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>test paper1</title>
-    <url>/2020/04/29/test1/</url>
-    <content><![CDATA[<h2 id="paper-1"><a href="#paper-1" class="headerlink" title="paper 1"></a>paper 1</h2><p>aaaa</p>
-]]></content>
-      <categories>
-        <category>cat1</category>
-      </categories>
-      <tags>
-        <tag>tag1</tag>
-        <tag>another tag</tag>
-        <tag>tag2</tag>
       </tags>
   </entry>
 </search>
