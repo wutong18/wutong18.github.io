@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wutong18.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any resu for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）  将话语映射到说话人身份子空间，其中说话者的相似性可以通过欧几里德距离来测量注：speaker embedding是指唯一确定的0-1一维向量，属于目标人是1（唯一），向量其余元素是0 注：i-vect">
+<meta property="og:type" content="article">
+<meta property="og:title" content="说话人识别">
+<meta property="og:url" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/index.html">
+<meta property="og:site_name" content="吴彤的博客">
+<meta property="og:description" content="An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）  将话语映射到说话人身份子空间，其中说话者的相似性可以通过欧几里德距离来测量注：speaker embedding是指唯一确定的0-1一维向量，属于目标人是1（唯一），向量其余元素是0 注：i-vect">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/speakeridentificationsystem.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/1-1.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/2-1.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-1.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-3.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-4.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-2.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-5.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-6.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-7.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-8.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-9.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-10.png">
+<meta property="article:published_time" content="2019-04-01T10:21:56.000Z">
+<meta property="article:modified_time" content="2020-04-30T10:28:40.361Z">
+<meta property="article:author" content="Wu Tong">
+<meta property="article:tag" content="-说话人识别">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/speakeridentificationsystem.png">
+
+<link rel="canonical" href="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>说话人识别 | 吴彤的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">吴彤的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习的点滴进步</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wutong18.github.io/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/img.jpeg">
+      <meta itemprop="name" content="Wu Tong">
+      <meta itemprop="description" content="description">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="吴彤的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          说话人识别
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-01 18:21:56" itemprop="dateCreated datePublished" datetime="2019-04-01T18:21:56+08:00">2019-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-30 18:28:40" itemprop="dateModified" datetime="2020-04-30T18:28:40+08:00">2020-04-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/" itemprop="url" rel="index"><span itemprop="name">-说话人识别</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）</center>
+
+<p>将话语映射到说话人身份子空间，其中说话者的相似性可以通过欧几里德距离来测量<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/speakeridentificationsystem.png" alt="speaker identification system"><br>注：<strong>speaker embedding是指唯一确定的0-1一维向量</strong>，属于目标人是1（唯一），向量其余元素是0</p>
+<p>注：i-vector是声纹说话人识别中的说话人矢量<br><a href="https://blog.csdn.net/weixin_38206214/article/details/81096092" target="_blank" rel="noopener">i-vector<br>讲解博客</a></p>
+<p>采用 GRU 来提取时间话语级别的特征，以保留一个人的说话风格。 然后，训练ResCNN模型来对说话人进行鲁棒嵌入。 最后，整个系统（包括GRU和ResCNN）通过使用所提出的损失函数联合优化，称为speaker identity subspace loss </p>
+<ol>
+<li><p><strong>数据输入</strong>：968个发言者，35,983句话，约27个小时的中文普通话发音。 每个人有大约37个话语，其持续时间大多在2到5秒左右。 通过随机选择100个说话者作为测试集，其他作为训练集。<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/1-1.png" alt="Data sets描述"></p>
+</li>
+<li><p><strong>GRU提取 utterance-level feature；</strong> contains more speaker characteristics</p>
+</li>
+</ol>
+<p><strong>提出GRU缺点</strong>： the output of GRU is always averaged to get utter level embeddings, ignoring one’s speaking style。<strong>解决办法</strong>：只将GRU的<strong>最后一个输出</strong>连接到affine以获得<strong>单个话语级特征</strong>，并进一步使用ResCNN来学习判别式说话人嵌入。以这种方式，不仅捕获了顺序性质，而且在嵌入中很好地建模了光谱相关性。</p>
+<ol start="3">
+<li><p><strong>ResCNN 假设一个“不同的话语”可以被视为理想说话者身份子空间中单个对象的变换。基于此假设，利用残差卷积神经网络（ResCNN）架构对变换进行建模</strong></p>
+</li>
+<li><p><strong>the speaker identity subspace loss</strong> significantly improves the discriminative ability of our system</p>
+</li>
+</ol>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/2-1.png" alt="speaker verification identity subspace loss"><br>  注：hp, hq 是说话者p ,q的身份向量。 Rpq是说话者p,q的声音距离关系</p>
+<p><strong>实验结果表明</strong>：<br>   该端到端系统性能更好，并且提出的说话者身份子空间丢失使得说话人身份嵌入更具辨别力。</p>
+<p>同时，实验对比指出：</p>
+<ol>
+<li><strong>话语时长5s足以训练短时说话人识别系统</strong>。 此外，持续时间较长可能会带来进一步改善，但也带来冗余。</li>
+<li><strong>每个人说 3-5 句话是比较合适的</strong>。</li>
+</ol>
+<hr>
+<center>Generalized End-to-End Loss for Speaker Verification</center>
+ Google 投 ICASSP2018
+
+
+<p>GE2E:具有新损失函数GE2E的模型通过将训练时间减少&gt; 60％，在更短的时间内将EER降低10％以上，从而学习更好的模型</p>
+<p>先前工作背景：Tuple-Based End-to-End Loss（TE2E）<br><strong>TE2E原理（还没做）</strong></p>
+<ol>
+<li>数据输入</li>
+</ol>
+<p>GE2E的训练数据基于一次性的大数据量的语句，一个batch包含N个人，M句话/人。（Xji代表j说话者的第i句话）<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-1.png" alt="数据输入"></p>
+<ol start="2">
+<li>GE2E的损失函数</li>
+</ol>
+<p>features extracted from each utterance xji——&gt;LSTM network——&gt;a linear layer——&gt;output:f(xji,w)<br>注：w是LSTM和linear layer的参数</p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-3.png" alt="embedding vector表达式"></p>
+<p>eji（正则化后的vector） represents the embedding vector of the jth speaker’s ith utterance</p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-4.png" alt="相似矩阵Sji,k表达式"></p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-2.png" alt="cos(a,b)解释"></p>
+<p>损失函数的两种算法</p>
+<ul>
+<li>softmax</li>
+</ul>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-5.png" alt="softmax的loss函数"></p>
+<ul>
+<li><p>contrast</p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-6.png" alt="相似矩阵Sji,k表达式"><br>正项对应于朝向cj（蓝色三角形）推动eji（蓝色圆圈）。 负项对应于拉动eji（蓝色圆圈）远离ck（红色三角形），因为ck与ck0相比更像eji。 因此，对比度损失使我们能够专注于困难的嵌入向量和负质心对。</p>
+</li>
+<li><p>两种损失函数比较：（1）两种函数都有用；（2）contrast损失对于td-sv表现更好，而softmax损失对于ti-sv表现稍好。</p>
+</li>
+</ul>
+<p>注：在计算真实说话者的质心时移除eji使得训练稳定并有助于避免琐碎的解决方案。 因此，在计算负相似性时仍使用公式1（即k != j），但我们在k = j时使用公式8</p>
+<p>综上所述：</p>
+<p> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-7.png" alt></p>
+<ol start="3">
+<li>TE2E、GE2E比较</li>
+</ol>
+<p><strong>a single batch in GE2E loss update</strong>: have N speakers,<br>each with M utterances. Each single step update will push all N×M embedding vectors toward their own centroids, and pull them away the other centroids.</p>
+<p> all possible tuples in the** TE2E loss function** for each xji.（没看懂）</p>
+<p>each update for xji in our GE2E loss is identical to at least 2(N − 1) steps in our TE2E loss，所以，GE2E比TE2E训练次数更少，更有效率。</p>
+<ol start="4">
+<li>Training with MultiReader<br>利用多个不同的数据源来做。为每个数据源的损失函数设置不同的权重，权重越高该数据源越重要；求所有数据源的损失函数的加权和。</li>
+</ol>
+<p>5.1 Text-Dependent Speaker Verification实验</p>
+<p><strong>训练数据</strong>有两个，（1）是 150M 句话 630K 说话者的“OK Google”<br> （2）是共 1.2M 句 18K 说话者的 “OK/Hey Google” 。第一个数据库比第二个大很多。</p>
+<p><strong>Table1 测试数据</strong>： 665 speakers with an average of 4.5 enrollment utterances and 10 evaluation utterances per speaker</p>
+<p><strong>Table2 测试数据</strong>：83 K different speakers and environmental conditions, from both anonymized logs and manual collections. We use an average of 7.3 enrollment utterances and 5 evaluation utterances per speaker.（<strong>the GE2E model took about 60% less training time than TE2E</strong>）</p>
+<p><strong>测试结果</strong><br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-8.png" alt><br>注：The baseline model is a single layer LSTM with 512 nodes and an embedding vector size of 128 [13]. The second and third rows’ model architecture is 3-layer LSTM.</p>
+<p>5.2 Text-Independent Speaker Verification实验<br> <strong>数据预处理</strong>divide training utterances into smaller segments, which we refer to as partial utterances. 不要求所有partial utterances具有相同的长度，但同一batch中的partial utterances所有必须具有相同的长度为t帧（140&lt;=t&lt;=180）.<br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-9.png" alt></p>
+<p><strong>滑动窗口的处理</strong>for every utterance we apply a sliding window of fixed size (140 + 180)/2 = 160 frames with 50% overlap.<br>We compute the d-vector for each window. The final utterance-wise d-vector is generated by L2 normalizing the window-wise d-vectors, then taking the element-wise averge (as shown in Figure 4)</p>
+<p><strong>训练数据</strong>：36M utterances from 18K speakers</p>
+<p><strong>测试数据</strong>：1K speakers with in average 6.3 enrollment utterances and 7.2 evaluation utterances per speaker</p>
+<p><strong>测试结果</strong></p>
+<p>GE2E training was about 3× faster than the other loss functions。<br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-10.png" alt></p>
+<ol start="6">
+<li>论文总结</li>
+</ol>
+<ul>
+<li><p>提出了GE2E损失函数，该函数正确率高，且所需训练时间短。</p>
+</li>
+<li><p>引入了MultiReader技术来组合不同的数据源，使模型能够支持多个关键字和多种语言。</p>
+</li>
+<li><p>针对不同长度的utterance提出了切分的想法。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/" rel="tag"># -说话人识别</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/11/RNN-LSTM-GRU/" rel="prev" title="RNN、 LSTM、 GRU">
+      <i class="fa fa-chevron-left"></i> RNN、 LSTM、 GRU
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/22/action/" rel="next" title="action recognition 泛读">
+      action recognition 泛读 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wu Tong"
+      src="/images/img.jpeg">
+  <p class="site-author-name" itemprop="name">Wu Tong</p>
+  <div class="site-description" itemprop="description">description</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wutong18" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wutong18" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/554318929@qq.com" title="E-Mail → 554318929@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wu Tong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">21k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">19 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"opacity":0.8},"mobile":{"show":true},"log":false});</script></body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wutong18.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any resu for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="RNN  用来连接先前的信息到当前的任务上，我们仅仅需要知道先前的信息来执行当前的任务。当相关的信息和预测的词位置之间的间隔是非常小的，RNN 可以学会使用先前的信息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RNN、 LSTM、 GRU">
+<meta property="og:url" content="https://wutong18.github.io/2019/03/11/RNN-LSTM-GRU/index.html">
+<meta property="og:site_name" content="吴彤的博客">
+<meta property="og:description" content="RNN  用来连接先前的信息到当前的任务上，我们仅仅需要知道先前的信息来执行当前的任务。当相关的信息和预测的词位置之间的间隔是非常小的，RNN 可以学会使用先前的信息。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1670295-a6b18283b9811f96">
+<meta property="og:image" content="https://wutong18.github.io/2019/03/11/RNN-LSTM-GRU/C3D.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/03/11/RNN-LSTM-GRU/C3D-2.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/9483503-e8ffa966b87f8954.png?imageMogr2/auto-orient/">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1670295-75b36291a15b976c">
+<meta property="article:published_time" content="2019-03-11T10:15:19.000Z">
+<meta property="article:modified_time" content="2020-04-30T10:20:18.559Z">
+<meta property="article:author" content="Wu Tong">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1670295-a6b18283b9811f96">
+
+<link rel="canonical" href="https://wutong18.github.io/2019/03/11/RNN-LSTM-GRU/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>RNN、 LSTM、 GRU | 吴彤的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">吴彤的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习的点滴进步</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wutong18.github.io/2019/03/11/RNN-LSTM-GRU/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/img.jpeg">
+      <meta itemprop="name" content="Wu Tong">
+      <meta itemprop="description" content="description">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="吴彤的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RNN、 LSTM、 GRU
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-11 18:15:19" itemprop="dateCreated datePublished" datetime="2019-03-11T18:15:19+08:00">2019-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-30 18:20:18" itemprop="dateModified" datetime="2020-04-30T18:20:18+08:00">2020-04-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ol>
+<li>RNN</li>
+</ol>
+<p>用来连接先前的信息到当前的任务上，我们仅仅需要知道先前的信息来执行当前的任务。当相关的信息和预测的词位置之间的间隔是非常小的，RNN 可以学会使用先前的信息。</p>
+<a id="more"></a>
+
+<p>但，当前相关信息和当前预测位置之间的间隔就肯定变得相当的大。不幸的是，在这个<strong>间隔不断增大时，RNN 会丧失学习到连接如此远的信息的能力</strong>。</p>
+<p>缺点：RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes。 （Google 《attention is all you need》提出）</p>
+<ol start="2">
+<li>LSTM</li>
+</ol>
+<p>LSTM 通过刻意的设计来避免长期依赖问题。<strong>记住长期的信息在实践中是 LSTM 的默认行为</strong>，而非需要付出很大代价才能获得的能力！</p>
+<p>但，LSTM的重复网络模块的结构很复杂，它实现了<strong>三个门计算，即遗忘门、输入门和输出门</strong>。</p>
+<ol start="3">
+<li>GRU（Gated Recurrent Unit）</li>
+</ol>
+<p><strong>GRU则是LSTM的一个变体</strong>，保持了LSTM的效果，同时<strong>结构更加简单</strong>，所以它也非常流行。</p>
+<p>GRU模型只有<strong>两个门</strong>了，分别为更新门和重置门。<strong>更新门</strong> 用于控制前一时刻的状态信息被带入到当前状态中的程度，更新门的值越大说明前一时刻的状态信息带入越多。<strong>重置门</strong> 用于控制忽略前一时刻的状态信息的程度，重置门的值越小说明忽略得越多。</p>
+<p><strong>GRU参数更少因此更容易收敛，但是数据集很大的情况下，LSTM表达性能更好</strong>。</p>
+<p><strong>GRU缺点：</strong>the output of GRU is always averaged to get utter level embeddings, ignoring one’s speaking style。（An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）提出） </p>
+<p><strong>解决办法</strong>：只将GRU的<strong>最后一个输出</strong>连接到affine以获得<strong>单个话语级特征</strong>，并进一步使用ResCNN来学习判别式说话人嵌入。以这种方式，不仅捕获了顺序性质，而且在嵌入中很好地建模了光谱相关性。</p>
+<ol start="4">
+<li>3D-Conv（C3D</li>
+</ol>
+<p>可以同时对外观和运动信息建模。</p>
+<p>，在有限的探究框架中，<strong>所有层使用3×3×3卷积核效果最好</strong>。</p>
+<p>15年ICCV的论文《Learning Spatiotemporal Feature with 3D Convolutional Networks》设计一种网络，把通过简单的线性分类器学到的<strong>特征称为为C3D</strong>(Convolutional 3D)，提出的C3D卷积网络是3D卷积网络的里程碑。</p>
+<p>C3D[2]是Facebook的一个工作，它主要是把2D Convolution扩展到3D。其原理如下图，我们知道2D的卷积操作是将卷积核在输入图像或特征图（feature map）上进行滑窗，得到下一层的特征图。例如，图(a)是在一个单通道的图像上做卷积，图(b)是在一个多通道的图像上做卷积（这里的多通道图像可以指同一张图片的3个颜色通道，也指多张堆叠在一起的帧，即一小段视频），最终的输出都是一张二维的特征图，也就是说，多通道的信息被完全压缩了。而在3D卷积中，为了保留时序的信息，对卷积核进行了调整，增加了一维时域深度。如图(c)所示，3D卷积的输出仍是一个三维的特征图。因此通过3D卷积，C3D可以直接处理视频，同时利用表观特征和时序特征。<br><img src="https://upload-images.jianshu.io/upload_images/1670295-a6b18283b9811f96" alt="2D 3D -convolution"></p>
+<p>该<strong>网络图如下</strong>：</p>
+<p><img src="/2019/03/11/RNN-LSTM-GRU/C3D.png" alt=" C3D架构"></p>
+<p><strong>网络图描述</strong>：该网络具有8个卷积层、5个池化层、两个全连接层，以及一个softmax输出层。所有3D卷积滤波器均为3×3×3，步长为1×1×1。为了保持早期的时间信息设置pool1核大小为1×2×2、步长1×2×2，其余所有3D池化层均为2×2×2，步长为2×2×2。每个全连接层有4096个输出单元。</p>
+<p>下图，在UCF101数据集上（101个人类动作类别的13,320个视频），与基于循环神经网络(RNN)的方法相比，<strong>C3D性能分别优于长期循环卷积网络(LRCN)和LSTM复合模型</strong>14.1％和9.4％。C3D特征既紧凑又具有识别力。</p>
+<p><img src="/2019/03/11/RNN-LSTM-GRU/C3D-2.png" alt="UCF101的动作识别结果"></p>
+<p> C3D与2015年最先进的方法相比。顶部：线性SVM的简单特征; 中间：仅采用RGB帧作为输入的方法；底部：使用多个特征（如光流、密集轨迹）组合的方法。结果表明c3D结合密集轨迹和SVM分类器效果最好</p>
+<p>–附：<br><img src="https://upload-images.jianshu.io/upload_images/9483503-e8ffa966b87f8954.png?imageMogr2/auto-orient/" alt="比较C3D与最好的公开结果。在一系列的基准上，C3D优于所有先前最好的报告方法，除了Sports-1M和UCF101。在UCF101，我们汇报了2组方法，第一组方法只使用了RGB帧作为输入，而第二组方法(括号里)使用了可能的特征(如：光流、改进的密集轨迹)"></p>
+<p><strong>基于pytorch的c3d模型代码</strong>：<a href="https://github.com/MRzzm/action-recognition-models-pytorch" target="_blank" rel="noopener" title="下载地址">https://github.com/MRzzm/action-recognition-models-pytorch</a></p>
+<ol start="5">
+<li>I3D</li>
+</ol>
+<p>I3D[3] 是 DeepMind 基于 C3D 作出的改进，值得一提的是 I3D 这篇文章也是发布 Kinetics数据集的文章。其创新点在于模型的权重初始化，如何将预训练好的2D ConvNets的权重赋值给3D ConvNets。具体地，将一张图像在时间维度上重复T次可以看作是一个（非常无聊的）T帧的视频，那么为了使该视频在3D结构上的输出和单帧图像在2D结构的输出相等，可以使3D卷积的权重等于2D卷积的权重重复T次，再将权重缩小T倍以保证输出一致。I3D在Kinetics数据集上进行预训练然后用于UCF101，其精度可达到98.0%。</p>
+<ol start="6">
+<li>P3D<br>《learning spatio-temporal representation with pseudo-3D residual networks》ICCV2017</li>
+</ol>
+<p>P3D[4]是MSRA基于C3D作出的改进，基本结构是把ResNet扩展为“伪”3D卷积，“伪”3D卷积的意思是利用一个1*3*3的2D空间卷积和3*1*1的1D时域卷积来模拟常用的3*3*3的3D卷积，如下图所示。P3D在参数数量、运行速度等方面对C3D作出了优化。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1670295-75b36291a15b976c" alt="P3D"></p>
+<p>GitHub链接<a href="https://github.com/ZhaofanQiu/pseudo-3d-residual-networks" target="_blank" rel="noopener" title="P3D GitHub链接">https://github.com/ZhaofanQiu/pseudo-3d-residual-networks</a></p>
+<ol start="7">
+<li>Transformer<br><a href="https://blog.csdn.net/songbinxu/article/details/80332992" target="_blank" rel="noopener">attention is all you need阅读笔记</a><br>Google在2017的《Attention is all you need》，提出解决sequence to sequence问题的transformer模型，用<strong>全attention的结构代替了lstm</strong>。<br>是第一个完全基于attention的序列转换模型，代替了encoder-decoder结构的递归网络，训练效果比之前的模型好。</li>
+</ol>
+<p><strong>RNN（或者LSTM，GRU等）</strong>的计算限制为是顺序的，也就是说RNN相关算法只能从左向右依次计算或者从右向左依次计算，这种机制带来了<strong>两个问题</strong>：</p>
+<p>1.时间片t的计算依赖t-1时刻的计算结果，这样<strong>限制了模型的并行能力，训练速度快</strong>；<br>2.顺序计算的过程中信息会丢失，尽管LSTM等门机制的结构一定程度上缓解了长期依赖的问题，但是对于<strong>特别长期的依赖现象</strong>,LSTM依旧无能为力。</p>
+<p><strong>创新之处</strong>在于提出了两个新的Attention机制，分别叫做 Scaled Dot-Product Attention 和 Multi-Head Attention。</p>
+<p><strong>局限/未来发展方向</strong>：</p>
+<ul>
+<li>当前仅用于文本形式的输入输出，还未使用到图像，语音，视频。</li>
+<li>使生成顺序更少。</li>
+</ul>
+<p><strong>Transformer代码</strong>已经发布在TensorFlow的tensor2tensor库中。</p>
+<ol start="8">
+<li>Two-Stream Network及其衍生系列(不理解)</li>
+</ol>
+<p>Two Stream[5]是VGG组的工作（不是UGG哦），其基本原理是训练两个ConvNets，分别对视频帧图像（spatial）和密集光流（temporal）进行建模，两个网络的结构是一样的，都是2D ConvNets，见下图。两个stream的网络分别对视频的类别进行判断，得到class score，然后进行分数的融合，得到最终的分类结果。</p>
+<p>可以看出Two-Stream和C3D是不同的思路，它所用的ConvNets都是2D ConvNets，对时序特征的建模体现在两个分支网络的其中一支上。Two-Stream的实验结果，在UCF101上达到88.0%的准确率。</p>
+<p>在spatial stream和temporal stream如何融合的问题上，有很多学者作出了改进。</p>
+<ul>
+<li><p>[6]在two stream network的基础上，利用3D Conv和3D Pooling进行spatial和temporal的融合，有点two stream + C3D的意思。另外，文章将两个分支的网络结构都换成了VGG-16。在UCF101的精度为92.5%。</p>
+</li>
+<li><p>TSN[7]是CUHK的工作，对进一步提高two stream network的性能进行了详尽的讨论。two stream在这里被用在视频片段（snippets）的分类上。关于two stream的输入数据类型，除去原有的视频帧图像和密集光流这两种输入外，文章发现加入warped optical flow也能对性能有所提高。在分支网络结构上尝试了GoogLeNet，VGG-16及BN-Inception三种网络结构，其中BN-Inception的效果最好。在训练策略上采用了跨模态预训练，正则化，数据增强等方法。在UCF101上达到94.2%的精度。</p>
+</li>
+</ul>
+<ol start="9">
+<li>TDD(不理解)<br>TDD[8]是对传统的iDT[9]算法的改进（iDT算法是深度学习以前最好的行为识别算法），它将轨迹特征和two-stream network结合使用，以two-stream network作为特征提取器，同时利用轨迹对特征进行选择，获得轨迹的深度卷积描述符，最后使用线性SVM进行视频分类。TDD是一个比较成功的传统方法与深度学习算法相结合的例子，在UCF上达到90.3%的精度。</li>
+</ol>
+<ol start="10">
+<li><p>ActionVLAD(不理解)<br>ActionVLAD[10]是一种特征融合的方式，它可以融合two stream的特征，C3D的特征以及其他网络结构的特征。其思想是对原有的特征计算残差并聚类，对不同时刻的帧进行融合，得到新的特征。ActionVLAD是对视频空间维度和时间维度的特征融合，使得特征的表达更全面。</p>
+</li>
+<li><p>Non-local Network(不理解)<br>Non-local Network[11]是Facebook何恺明和RBG两位大神近期的工作，非局部操作（non-local operations）为解决视频处理中时空域的长距离依赖打开了新的方向。我们知道，卷积结构只能捕捉数据的局部信息，它对于非局部特征的信息传递不够灵活。Non-local Network则根据所有帧所有位置的信息对某个位置进行调整。文章把这个block加在I3D上做了实验，在Charades上精度提升2%</p>
+</li>
+</ol>
+<p>scquence2senquence<br>encoder-decoder</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/qq_28743951/article/details/78974058" target="_blank" rel="noopener">https://blog.csdn.net/qq_28743951/article/details/78974058</a><br><a href="https://blog.csdn.net/wangyangzhizhou/article/details/77332582" target="_blank" rel="noopener">https://blog.csdn.net/wangyangzhizhou/article/details/77332582</a><br><a href="https://blog.csdn.net/pipisorry/article/details/84946653" target="_blank" rel="noopener">https://blog.csdn.net/pipisorry/article/details/84946653</a><br><a href="https://www.jianshu.com/p/e416b837351d" target="_blank" rel="noopener">https://www.jianshu.com/p/e416b837351d</a><br><a href="https://www.jianshu.com/p/526e90bb2ba0" target="_blank" rel="noopener">https://www.jianshu.com/p/526e90bb2ba0</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/02/25/action-recognition-2/" rel="prev" title="action recognition 实现方式总结">
+      <i class="fa fa-chevron-left"></i> action recognition 实现方式总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/" rel="next" title="说话人识别">
+      说话人识别 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wu Tong"
+      src="/images/img.jpeg">
+  <p class="site-author-name" itemprop="name">Wu Tong</p>
+  <div class="site-description" itemprop="description">description</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wutong18" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wutong18" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/554318929@qq.com" title="E-Mail → 554318929@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wu Tong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">21k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">19 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"opacity":0.8},"mobile":{"show":true},"log":false});</script></body>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wutong18.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any resu for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="总结多篇 action recognition 的论文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="action recognition 泛读">
+<meta property="og:url" content="https://wutong18.github.io/2019/04/22/action/index.html">
+<meta property="og:site_name" content="吴彤的博客">
+<meta property="og:description" content="总结多篇 action recognition 的论文">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdn.net/20141008205106374?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20141008204957796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_1-3.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_2-1.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_2-2.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_3-1.png">
+<meta property="og:image" content="https://img-blog.csdn.net/2018031910343826?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTM5ODIxNjQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_4-1.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_4-2.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_4-3.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_4-4.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1093303/201705/1093303-20170504113433539-94801265.jpg">
+<meta property="og:image" content="https://img-blog.csdn.net/20180319152830700">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1564401-38737505893bae67.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_5-1.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_5-2.png">
+<meta property="og:image" content="https://wutong18.github.io/2019/04/22/action/Action_R_5-3.png">
+<meta property="article:published_time" content="2019-04-22T08:10:51.000Z">
+<meta property="article:modified_time" content="2020-04-30T10:07:46.902Z">
+<meta property="article:author" content="Wu Tong">
+<meta property="article:tag" content="action recognition">
+<meta property="article:tag" content="skeleton">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20141008205106374?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+<link rel="canonical" href="https://wutong18.github.io/2019/04/22/action/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>action recognition 泛读 | 吴彤的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">吴彤的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习的点滴进步</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wutong18.github.io/2019/04/22/action/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/img.jpeg">
+      <meta itemprop="name" content="Wu Tong">
+      <meta itemprop="description" content="description">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="吴彤的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          action recognition 泛读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-22 16:10:51" itemprop="dateCreated datePublished" datetime="2019-04-22T16:10:51+08:00">2019-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-30 18:07:46" itemprop="dateModified" datetime="2020-04-30T18:07:46+08:00">2020-04-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/action-recognition/" itemprop="url" rel="index"><span itemprop="name">action recognition</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>总结多篇 action recognition 的论文</p>
+<a id="more"></a>
+
+<h3 id="Large-scale-Video-Classiﬁcation-with-Convolutional-Neural-Networks-CVPR2014"><a href="#Large-scale-Video-Classiﬁcation-with-Convolutional-Neural-Networks-CVPR2014" class="headerlink" title="Large-scale Video Classiﬁcation with Convolutional Neural Networks(CVPR2014)"></a>Large-scale Video Classiﬁcation with Convolutional Neural Networks(CVPR2014)</h3><ol>
+<li><p>使用CNN拓变体，用于视频分类；</p>
+</li>
+<li><p>使用<strong>两种不同的分辨率的帧分别作为输入</strong>，输入到两个CNN中，在最后的两个全连接层将两个CNN统一起来；两个流分别是<strong>低分辨率的内容流</strong>和采用<strong>每一个帧中间部分的高分辨率流</strong>(如图1)；</p>
+</li>
+</ol>
+<p><strong>高分辨率流学习灰度，高频特征，而低分辨率流模拟较低的频率和颜色</strong>。</p>
+<p><img src="https://img-blog.csdn.net/20141008205106374?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<ol start="3">
+<li>将从自建数据库学习到的CNN结构迁移到UCF-101数据集上面。</li>
+</ol>
+<p>在考虑时间关联性方面，作者提出了四种方案(如图2)，并且进行了相关实验，实验的结果表示这四种方面都能取得很好的结果。</p>
+<p><strong>Slow Fusion网络效果最好 。</strong><br><img src="https://img-blog.csdn.net/20141008204957796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt> </p>
+<ol start="4">
+<li>作者也做了关于迁移学习的实验，在迁移对为未训练的数据分类时，对最后一层softmax、最后两层softmax、整个网络分别再训练，得到了效果对比：仅训练最后两层softmax效果较好。<br><img src="/2019/04/22/action/Action_R_1-3.png" alt></li>
+</ol>
+<h3 id="Two-Stream-Convolutional-Networks-for-Action-Recognition-in-Videos（NIPS-2014）"><a href="#Two-Stream-Convolutional-Networks-for-Action-Recognition-in-Videos（NIPS-2014）" class="headerlink" title="Two-Stream Convolutional Networks for Action Recognition in Videos（NIPS 2014）"></a>Two-Stream Convolutional Networks for Action Recognition in Videos（NIPS 2014）</h3><p>阅读时间：2019年5月27日</p>
+<p> <strong>1.Multi-task learning多任务学习</strong></p>
+<p>Multi-tasklearning （多任务学习）是和single-task learning （单任务学习）相对的一种机器学习方法。拿大家经常使用的school data做个简单的对比，school data是用来预测学生成绩的回归问题的数据集，总共有139个中学的15362个学生，其中每一个中学都可以看作是一个预测任务。单任务学习就是忽略任务之间可能存在的关系分别学习139个回归函数进行分数的预测，或者直接将139个学校的所有数据放到一起学习一个回归函数进行预测。而多任务学习则看重任务之间的联系，通过联合学习，同时对139个任务学习不同的回归函数，既考虑到了任务之间的差别，又考虑到任务之间的联系，这也是多任务学习最重要的思想之一。</p>
+<p>优势：能发掘这些子任务之间的关系，同时又能区分这些任务之间的差别。比如多标签图像的分类，人脸的识别等等。</p>
+<p>方法：大致可以总结为两类，一是不同任务之间共享相同的参数（common parameter），二是挖掘不同任务之间隐藏的共有数据特征（latent feature）。</p>
+<p>时间流使用多任务训练时，不论有无空间流，效果都比单任务训练效果好。</p>
+<p><strong>2. two-stream 的连接方式</strong></p>
+<p>连接时间和空间流的方法：（1）是在两个网络的full6或full7层的顶部训练一组全连接层，但会过度拟合。（2）使用平均或线性SVM融合softmax分数</p>
+<p><img src="/2019/04/22/action/Action_R_2-1.png" alt></p>
+<p><strong>3. 两种时间流堆栈方式</strong></p>
+<p>（1）光流堆叠 Optical flow stacking ： 计算每两帧之间相同位置的光流，然后简单的stacking</p>
+<p>（2）轨迹堆叠 Trajectory stacking ： 轨迹叠加就是假设第一帧的某个像素点，我们可以通过光流来追踪它在视频中的轨迹</p>
+<p><img src="/2019/04/22/action/Action_R_2-2.png" alt></p>
+<h3 id="Learning-Spatiotemporal-Features-with-3D-Convolutional-Networks-（CVPR-2015）"><a href="#Learning-Spatiotemporal-Features-with-3D-Convolutional-Networks-（CVPR-2015）" class="headerlink" title="Learning Spatiotemporal Features with 3D Convolutional Networks##（CVPR 2015）"></a>Learning Spatiotemporal Features with 3D Convolutional Networks##（CVPR 2015）</h3><p><a href="https://github.com/facebook/C3D" target="_blank" rel="noopener">代码</a></p>
+<p>阅读时间：2019年5月28日</p>
+<p><strong>1. 问题</strong></p>
+<ul>
+<li>2D卷积对时空特征的学习不好</li>
+<li>本文将二维卷积推广到了三维，提取的特征高效、紧致、使用简单</li>
+</ul>
+<p><strong>2. 方法</strong></p>
+<ul>
+<li>用3D卷积网络，同时提取空间和时间信息</li>
+<li>All 3D convolution kernels are 3 × 3 × 3 with stride 1</li>
+<li>All pooling kernels are 2 × 2 × 2, except for pool1 is 1 × 2 × 2</li>
+<li>学习到的特征输入到线性分类器(多分类线性SVM),分类效果好</li>
+</ul>
+<p><strong>3. 收获</strong></p>
+<ul>
+<li>3D卷积更加适合学习时域空域(spatiotemporal)特征学习</li>
+<li>特征紧凑，计算效率高，易于训练和使用</li>
+</ul>
+<p><img src="/2019/04/22/action/Action_R_3-1.png" alt></p>
+<p><strong>4. C3D学到了什么？</strong></p>
+<p>观察到<strong>C3D首先关注前几帧中的appearance，并跟踪后续帧中的显着运动</strong>。Thus C3D differs from standard 2D ConvNets in that it selectively attends to both motion and appearance.</p>
+<p><strong>可以在卷积层后使用反卷积，查看网络学到了什么。</strong></p>
+<p>C3D可以很好地捕获外观和运动信息，因此与基于外观的深度特征的Imagenet结合没有任何好处。另一方面，<strong>将C3D与iDT结合起来是有益的</strong>，因为它们彼此高度互补。实际上，iDT是基于光流跟踪和低级梯度直方图的手工制作功能，而C3D则捕获高级抽象/语义信息。</p>
+<p> ** # t-SNE：可视化**，能保持局部结构的能力，高维数据空间中距离相近的点投影到低维中仍然相近。use deconvolution to project the top activations of these clips back into image space</p>
+<h3 id="Learning-Spatio-Temporal-Representation-with-Pseudo-3D-Residual-Networks-ICCV-2017-P3D"><a href="#Learning-Spatio-Temporal-Representation-with-Pseudo-3D-Residual-Networks-ICCV-2017-P3D" class="headerlink" title="Learning Spatio-Temporal Representation with Pseudo-3D Residual Networks##( ICCV 2017)  P3D"></a>Learning Spatio-Temporal Representation with Pseudo-3D Residual Networks##( ICCV 2017)  P3D</h3><p>使用的可视化代码<a href="https://github.com/auduno/deepdraw" target="_blank" rel="noopener">DeepDraw</a></p>
+<p>阅读时间：2019年5月29日</p>
+<p><strong>0. 为什么提该网络</strong></p>
+<ul>
+<li>如何更好地提取视频的空间时序特征信息对于视频内容的分析具有重要的意义；</li>
+<li>2D卷积神经网络不能很好的学习到视频的时序信息，而看起来更加合理的3D卷积神经网络却需要大量的计算量，而且需要在没有预训练参数的情况下从头开始训练；</li>
+<li>在2D Conv网络结构基础上增加pooling或者RNN的方法不能很好地提取视频的低层信息间的联系。</li>
+</ul>
+<p><strong>1. 问题</strong></p>
+<ul>
+<li>3D Convolutions对视频的时域空域特征学习更好</li>
+<li>重头训练一个深的3D CNN会消耗大量成本和内存</li>
+<li>随机初始化的三维卷积核需要大量精细标注的视频数据来进行训练</li>
+<li>本文提出基于伪三维卷积和残差学习的神经网络模块</li>
+<li>在CVPR 2017的Activity Net Challenge的Dense-Captioning任务中获得第一名</li>
+</ul>
+<p><strong>2. 方法</strong></p>
+<p><img src="https://img-blog.csdn.net/2018031910343826?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTM5ODIxNjQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="P3D 的三种变体示意图"> </p>
+<ul>
+<li>the key component in each block is a combination of one 1 × 3 × 3 convolutional layer and one layer of 3 × 1 × 1 convolutions in a parallel or cascaded fashion, that takes the place of a standard 3 × 3 × 3 convolutional layer.</li>
+<li>即 con3D = S + T = 1 × 3 × 3 + 3 × 1 × 1 如上图上部分所示</li>
+<li>其中二维卷积核可以使用图像数据进行预训练，对于已标注视频数据的需求也会大大减少</li>
+<li>P3D Blocks ：P3D-A，P3D-B，P3D-C 分别使用串行、并行和带捷径（shortcut）的串行三种方式，如上图中间部分所示</li>
+<li>P3D ResNet：三种伪三维残差单元替代ResNet中的二维残差单元，如上图下部分所示</li>
+</ul>
+<p><strong>3. 收获</strong></p>
+<ul>
+<li>以后遇到时域的数据，可以增加一个网络学习</li>
+<li>要设计非常深的网络时要借鉴残差网络的思想</li>
+<li>训练非常深的3D CNN非常困难，需要很大的计算量。更重要的是，使用Sports-1M数据集中的帧直接微调ResNet-152可以获得比从头开始训练的C3D更高的准确度</li>
+</ul>
+<p>** # TDD特征：Trajectory-pooled Deep-convolutional Descriptor**<br>结合了hand-craft features 和 deep convolutional features两种提取特征的方式，</p>
+<p>** # DeepDraw<strong>：P3D ResNet模型使用DeepDraw 来对模型学习的内容 **可视化</strong>。<a href="https://github.com/auduno/deepdraw" target="_blank" rel="noopener">https://github.com/auduno/deepdraw</a></p>
+<p>整个过程分两步：</p>
+<ul>
+<li>利用cnn学习convolutional features</li>
+<li>采用trajectory-constrained sample and pooling策略对convolutional features进行aggregate，形成descriptor。</li>
+<li>利用费舍尔矢量将这些局部的TDDs aggregate成一个全局长矢量，再用svm分类。</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>自动的学习视频特征，避免了过多的hand-craft 提取。</li>
+<li>考虑到了视频的时间特性，采用trajector-constrained sample and pooling对cnn自动学习到的特征进行aggregate。</li>
+<li>并且证明了TDD其实就是各类hand-craft的融合。（our results demonstrate that our TDDs are complementary to those hand-crafted features (HOG, HOF, and MBH) and the fusion of them is able to further boost the recognition performance.）</li>
+</ul>
+<h3 id="Attentional-Pooling-for-Action-Recognition-NIPS-2017"><a href="#Attentional-Pooling-for-Action-Recognition-NIPS-2017" class="headerlink" title="Attentional Pooling for Action Recognition (NIPS 2017)"></a>Attentional Pooling for Action Recognition (NIPS 2017)</h3><p>阅读时间：2019年6月2日</p>
+<p><a href="https://github.com/rohitgirdhar/AttentionalPoolingAction" target="_blank" rel="noopener">代码 https://github.com/rohitgirdhar/AttentionalPoolingAction</a></p>
+<p><strong>1.问题</strong></p>
+<ul>
+<li>传统一阶注意力网络大多为学习一个locations*<br>1的mask向量，向量的值代表了对应位置上的权重，但是它没有挖掘到，location之间的关系或者说是相互作用的权重</li>
+</ul>
+<p><strong>2.方法</strong></p>
+<ul>
+<li><p><strong>Attentional pooling as low-rank approximation of second-order pooling</strong><br>Second-order pooling<br><img src="/2019/04/22/action/Action_R_4-1.png" alt="Second-order pooling"></p>
+<p>Low-rank second-order pooling<br><img src="/2019/04/22/action/Action_R_4-2.png" alt="Second-order pooling"></p>
+<p>Top-down attention<br><img src="/2019/04/22/action/Action_R_4-3.png" alt="Second-order pooling"></p>
+</li>
+<li><p><strong>融合 注意力和 低阶二阶池化</strong>，引入了一种简单的注意力表达式作为低阶二阶汇集，整合自下而上的显着性和自上而下的注意力。通过 Attention pooling 层可以学到一个二阶 attention 矩阵，而不仅仅只是一个 mask 向量，然后再 conbine 二阶和一阶的 mask ，就能得到更加精确的注意力关注区域<br><img src="/2019/04/22/action/Action_R_4-4.png" alt="Second-order pooling"></p>
+</li>
+</ul>
+<p><strong># 目标检测网络</strong> <a href="https://www.cnblogs.com/skyfsm/p/6806246.html" target="_blank" rel="noopener">详细讲解</a><br>R-CNN、Fast R-CNN、Faster R-CNN</p>
+<p><strong># 空间金字塔池化</strong><br>将金字塔思想加入到CNN，实现了<strong>数据的多尺度输入</strong>。一般CNN后接全连接层或者分类器，他们都需要固定的输入尺寸，因此不得不对输入数据进行crop或者warp，这些预处理会造成数据的丢失或几何的失真。</p>
+<p>如下图所示，在卷积层和全连接层之间加入了SPP layer。此时网络的输入可以是任意尺度的，在SPP layer中每一个pooling的filter会根据输入调整大小，而SPP的输出尺度始终是固定的。<br><img src="https://images2015.cnblogs.com/blog/1093303/201705/1093303-20170504113433539-94801265.jpg" alt="金字塔SPP"></p>
+<p><strong># TSN(Temporal Segment Networks)</strong></p>
+<p>基于长范围时间结构，结合了稀疏时间采样策略来保证使用整段视频时学习得有效和高效。基于two-stream方法构建，但不同于two-stream采用单帧或者单堆帧，TSN使用从整个视频中稀疏地采样一系列短片段，每个片段都将给出其本身对于行为类别的初步预测，从这些片段的“共识”来得到视频级的预测结果。</p>
+<p><img src="https://img-blog.csdn.net/20180319152830700" alt="TSN示意图"></p>
+<p>由上图所示，一个输入视频被分为 KK 段（segment），一个片段（snippet）从它对应的段中随机采样得到。不同片段的类别得分采用段共识函数（The segmental consensus function）进行融合来产生段共识（segmental consensus），这是一个视频级的预测。然后对所有模式的预测融合产生最终的预测结果。</p>
+<p><strong># ResNet 101、 BN-Inception模型＋注意力 比较</strong></p>
+<p>两种模型在训练完整图像时表现差不多，但结合注意力后，R-101有4％的改进，I-V2不改善效果。</p>
+<p>说明两模型的主要<strong>区别</strong>：Inception-style models在输入图片的初始层通过max-pooling快速下采样，这样在后续层计算成本降低，训练更快，但是它导致大多数层具有非常大的感受野，因此后来的神经元可以有效地访问所有图像像素。这表明最后一层的所有空间特征可能非常相似。</p>
+<p>而R-101，逐渐降低空间分辨率，允许最后一层特征专注于图像的不同部分，因此更多地受益于注意力集中。<strong>输入的图片size需要稍大一些，以确保the last-layer features are sufficiently distinct to benefit from attentional pooling</strong>.</p>
+<h3 id="Temporal-Segment-Networks-Towards-Good-Practices-for-Deep-Action-Recognition-ECCV2016"><a href="#Temporal-Segment-Networks-Towards-Good-Practices-for-Deep-Action-Recognition-ECCV2016" class="headerlink" title="Temporal Segment Networks: Towards Good Practices for Deep Action Recognition (ECCV2016)"></a>Temporal Segment Networks: Towards Good Practices for Deep Action Recognition (ECCV2016)</h3><p>阅读时间：</p>
+<h3 id="TACNet-Transition-Aware-Context-Network-for-Spatio-Temporal-Action-Detection（CVPR2019）"><a href="#TACNet-Transition-Aware-Context-Network-for-Spatio-Temporal-Action-Detection（CVPR2019）" class="headerlink" title="TACNet: Transition-Aware Context Network for Spatio-Temporal Action Detection（CVPR2019）"></a>TACNet: Transition-Aware Context Network for Spatio-Temporal Action Detection（CVPR2019）</h3><p>阅读时间：2019.6.21</p>
+<p><strong>1.问题</strong></p>
+<ul>
+<li><p><strong>之前方法的缺陷</strong>：空间-时间流方法动作识别方法将视频帧视为一组独立图像，无法利用视频的时间连续性</p>
+</li>
+<li><p><strong>之前方法的缺陷</strong>：ACT虽然采用堆叠策略来利用剪辑级检测的短期时间连续性，但仍无法提取长期时间上下文信息，显著提高识别性能。</p>
+</li>
+<li><p><strong>该网络克服的问题</strong>：提取长期时间背景信息，区分过渡状态，提出a common and differential mode scheme to accelerate the convergence of TACNet。</p>
+</li>
+</ul>
+<p><strong>2.方法</strong></p>
+<ul>
+<li><p>提出转换感知上下文网络（TACNet）包括两个主要组件，即时间上下文检测器和转换感知分类器。</p>
+</li>
+<li><p><strong>时间上下文检测器</strong>可以通过构建循环网络（standard SSD framework, but can encode the long-term context information by embedding several multi-scale Bi-directional Conv-LSTM units）来提取具有恒定时间复杂度的长期上下文信息。</p>
+</li>
+<li><p>转变感知分类器可以通过同时分类动作和过渡状态来进一步区分过渡状态。因此，所提出的TACNet可以显着改善时空行为检测的性能</p>
+</li>
+<li><p>将Bi-ConvLSTM单元嵌入到SSD框架中以设计循环检测器。作为一种LSTM，ConvLSTM可以编码长期信息，更适合处理视频等时空数据。</p>
+</li>
+</ul>
+<p><strong>3.收获</strong></p>
+<p><strong>#</strong> SSD、ACT、Con-LSTM</p>
+<p>-ACT detector：分析视频序列，检测某些动作发生的时空位置（起止时间和每一帧视频中的发生位置），即spatio-temporal action localization。</p>
+<p>步骤：1.将每一帧的视频按照时序输入到SSD网络； 2.将SSD网络中的各层特征图按照STACK排列，简单说就是，将各层特征按照，同层特征横向排列，不同层特征纵向排列。这样就将各层的特征按照时序组织起来了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1564401-38737505893bae67.png" alt="ACT-detector网络结构"></p>
+<ul>
+<li>SSD网络：目标检测</li>
+</ul>
+<hr>
+<h2 id="3D-data"><a href="#3D-data" class="headerlink" title="3D data"></a><center>3D data</center></h2><h3 id="Describing-Local-Reference-Frames-for-3-D-Motion-Trajectory-Recognition-IEEE-access-2018"><a href="#Describing-Local-Reference-Frames-for-3-D-Motion-Trajectory-Recognition-IEEE-access-2018" class="headerlink" title="Describing Local Reference Frames for 3-D Motion Trajectory Recognition(IEEE access 2018)"></a>Describing Local Reference Frames for 3-D Motion Trajectory Recognition(IEEE access 2018)</h3><p>阅读时间：2019.6.17</p>
+<p><strong>1. 问题</strong></p>
+<ul>
+<li><p>运动轨迹的原始数据或绘制简单的几何量不能表征3D点的方向变化。</p>
+</li>
+<li><p>高阶导数是3D点轨迹的一种完整描述符，可表示点的位置和方向变化，但对轨迹中的噪声敏感。</p>
+</li>
+</ul>
+<p><strong>2. 方法</strong></p>
+<ul>
+<li><p><strong>使用弗莱纳(Frenet–Serret)公式(切向量t;  法向量n;  正常向量b)表示3D运动轨迹</strong></p>
+</li>
+<li><p><strong>欧拉旋转定理 + 平方根速度矢量 作为 descriptor</strong></p>
+</li>
+<li><p><strong>Fisher Vector作为输入</strong>：Fisher kernels对输入向量进行了编码，以一个新的梯度向量来表示原输入向量，这个新的梯度向量就是Fisher Vector。这样编码的好处在于可以<strong>将任意长度的输入向量转换成定长向量</strong></p>
+</li>
+</ul>
+<p><strong>3. 收获</strong></p>
+<p>-<strong>使用向量表示3D运动轨迹</strong>，G(t)={x(t),y(t),z(t),t是时间</p>
+<p>轨迹用弗莱纳(Frenet–Serret)公式(切向量t;  法向量n;  正常向量b)表示<br><img src="/2019/04/22/action/Action_R_5-1.png" alt><br><img src="/2019/04/22/action/Action_R_5-2.png" alt></p>
+<ul>
+<li><strong>识别效果不如最好的实验，理由</strong>：1、我们只使用了唇部的数据，而其他的数据使用了整个脸部的数据；2、使用的160个唇部深度数据比RGB整个脸部或唇部图片小很多，训练速度快，占用内存少。</li>
+<li><strong>提出</strong>了一种<strong>运动轨迹描述方法</strong>，在沿运动轨迹的每个点都用descriptor表示，描述了运动的方向</li>
+<li>可以<strong>把descriptor 和原始数据拼接</strong>后放入神经网络；或分别用底层神经网络提取特征后在融合训练。</li>
+</ul>
+<p>** # 其他的3D数据描述方式 **</p>
+<p>微分不变量、积分不变量、SRVF、多尺度SSM、3D形状背景、LRFb<br><img src="/2019/04/22/action/Action_R_5-3.png" alt></p>
+<p>16年Convolutional Two-Stream Network Fusion for Video Action Recognition<br>此论文有公开源代码，用的是MATLAB。</p>
+<p>17年Hidden Two-Stream Convolutional Networks for Action Recognition<br>此论文有公开源代码，用的是Caffe。</p>
+<h1 id="可以尝试"><a href="#可以尝试" class="headerlink" title="可以尝试"></a>可以尝试</h1><p>C3D、 P3D、 attention</p>
+<p>弗莱纳(Frenet–Serret)公式</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/action-recognition/" rel="tag"># action recognition</a>
+              <a href="/tags/skeleton/" rel="tag"># skeleton</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/" rel="prev" title="说话人识别">
+      <i class="fa fa-chevron-left"></i> 说话人识别
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/05/Attention-is-all-you-need/" rel="next" title="Attention is all you need(Transformer模型)">
+      Attention is all you need(Transformer模型) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Large-scale-Video-Classiﬁcation-with-Convolutional-Neural-Networks-CVPR2014"><span class="nav-number">1.</span> <span class="nav-text">Large-scale Video Classiﬁcation with Convolutional Neural Networks(CVPR2014)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Stream-Convolutional-Networks-for-Action-Recognition-in-Videos（NIPS-2014）"><span class="nav-number">2.</span> <span class="nav-text">Two-Stream Convolutional Networks for Action Recognition in Videos（NIPS 2014）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learning-Spatiotemporal-Features-with-3D-Convolutional-Networks-（CVPR-2015）"><span class="nav-number">3.</span> <span class="nav-text">Learning Spatiotemporal Features with 3D Convolutional Networks##（CVPR 2015）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learning-Spatio-Temporal-Representation-with-Pseudo-3D-Residual-Networks-ICCV-2017-P3D"><span class="nav-number">4.</span> <span class="nav-text">Learning Spatio-Temporal Representation with Pseudo-3D Residual Networks##( ICCV 2017)  P3D</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attentional-Pooling-for-Action-Recognition-NIPS-2017"><span class="nav-number">5.</span> <span class="nav-text">Attentional Pooling for Action Recognition (NIPS 2017)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Temporal-Segment-Networks-Towards-Good-Practices-for-Deep-Action-Recognition-ECCV2016"><span class="nav-number">6.</span> <span class="nav-text">Temporal Segment Networks: Towards Good Practices for Deep Action Recognition (ECCV2016)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TACNet-Transition-Aware-Context-Network-for-Spatio-Temporal-Action-Detection（CVPR2019）"><span class="nav-number">7.</span> <span class="nav-text">TACNet: Transition-Aware Context Network for Spatio-Temporal Action Detection（CVPR2019）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3D-data"><span class="nav-number"></span> <span class="nav-text">3D data</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Describing-Local-Reference-Frames-for-3-D-Motion-Trajectory-Recognition-IEEE-access-2018"><span class="nav-number">1.</span> <span class="nav-text">Describing Local Reference Frames for 3-D Motion Trajectory Recognition(IEEE access 2018)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可以尝试"><span class="nav-number"></span> <span class="nav-text">可以尝试</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wu Tong"
+      src="/images/img.jpeg">
+  <p class="site-author-name" itemprop="name">Wu Tong</p>
+  <div class="site-description" itemprop="description">description</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wutong18" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wutong18" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/554318929@qq.com" title="E-Mail → 554318929@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wu Tong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">21k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">19 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"opacity":0.8},"mobile":{"show":true},"log":false});</script></body>
+</html>
