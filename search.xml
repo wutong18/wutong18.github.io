@@ -1,211 +1,714 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>【hexo】 Spawn failed at ChildProcess</title>
-      <link href="/2020/03/04/hexo-Spawn-failed/"/>
-      <url>/2020/03/04/hexo-Spawn-failed/</url>
-      
-        <content type="html"><![CDATA[<p><img src="/2020/03/04/hexo-Spawn-failed/spawnfail.PNG" alt></p><a id="more"></a><p>在github上部署hexo博客时遇到问题。 </p><p>hexo d出错。</p><p>发生这种情况时，通常只需要在良好的网络条件下再次部署即可,可以一段时间后多试几次。 这是网速不好，无法正常运行。</p>]]></content>
-      
-      
+<search>
+  <entry>
+    <title>CNN、ResNet、DenseNet</title>
+    <url>/2019/06/16/CNN-ResNet-DenseNet/</url>
+    <content><![CDATA[<p>总结CNN、ResNet、DenseNet。 </p>
+<a id="more"></a>
+
+<p>总结：</p>
+<p>LeNet是第一个成功应用于手写字体识别的卷积神经网络 ALexNet展示了卷积神经网络的强大性能，开创了卷积神经网络空前的高潮</p>
+<p>ZFNet通过可视化展示了卷积神经网络各层的功能和作用</p>
+<p>VGG采用堆积的小卷积核替代采用大的卷积核，堆叠的小卷积核的卷积层等同于单个的大卷积核的卷积层，不仅能够增加决策函数的判别性还能减少参数量</p>
+<p>GoogleNet增加了卷积神经网络的宽度，在多个不同尺寸的卷积核上进行卷积后再聚合，并使用1*1卷积降维减少参数量</p>
+<p>ResNet解决了网络模型的退化问题，允许神经网络更深<br>注：关于AlexNet，GoogleNet，VGG和ResNet网络架构的demo代码见：<a href="https://github.com/skloisMary/demo-Network.git" target="_blank" rel="noopener">https://github.com/skloisMary/demo-Network.git</a></p>
+<p>参考博客:</p>
+<p>AlexNet、ZFNet、VGGNet、GoogleNet和ResNet模型<br><a href="https://blog.csdn.net/weixin_42111770/article/details/80719302" target="_blank" rel="noopener">https://blog.csdn.net/weixin_42111770/article/details/80719302</a>**</p>
+<p>GoogLeNet（从Inception v1到v4的演进）<br><a href="https://my.oschina.net/u/876354/blog/1637819" target="_blank" rel="noopener">https://my.oschina.net/u/876354/blog/1637819</a>**</p>
+<hr>
+<p>各种CNN变形</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/skyfsm/p/8451834.html" target="_blank" rel="noopener">https://www.cnblogs.com/skyfsm/p/8451834.html</a></p>
+</blockquote>
+<p>###<center>CNN</center><br>在计算机视觉领域，卷积神经网络（CNN）已经成为最主流的方法，比如最近的GoogLenet，VGG-19，Incepetion等模型。</p>
+<p>使用CNN作为基本构建块，为了减少顺序计算的模型有the Extended Neural GPU, ByteNet and ConvS2S，它们并行计算所有input的hidden representations和 output 的 positions。 在这些模型中，关联来自两个任意输入或输出位置的信号所需的操作数量，随距离的增长，对于ConvS2S呈线性增长，对于ByteNet呈对数增长。</p>
+<p>###<center>VGG</center><br><img src="https://images2017.cnblogs.com/blog/1093303/201802/1093303-20180217131751843-269987601.png" alt></p>
+<p>###<center>GoogLeNe</center></p>
+<p>###<center>ResNet深度残差网络(允许网络尽可能的加深)</center></p>
+<p><strong>ResNet可以解决“随着网络加深，准确率不下降”的问题</strong><br>ResNet模型是CNN史上的一个里程碑事件，核心是通过<strong>建立前面层与后面层之间的“短路连接”，这有助于训练过程中梯度的反向传播，从而能训练出更深的CNN网络</strong>，从而实现更高的准确度。</p>
+<p>针对这个问题提出了一种全新的网络，叫深度残差网络，它允许网络尽可能的加深，其中引入了全新的结构如图：</p>
+<p><img src="https://img-blog.csdn.net/20180114184946861?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGFucmFuMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="ResNet结构图"></p>
+<p>其中ResNet提出了两种mapping：</p>
+<p>一种是identity mapping，指的就是图1中”弯弯的曲线”，另一种residual mapping，指的就是除了”弯弯的曲线“那部分，所以最后的输出是 y=F(x)+xy=F(x)+x </p>
+<p>identity mapping顾名思义，就是指本身，也就是公式中的xx，而residual mapping指的是“差”，也就是y−xy−x，所以<strong>残差指的就是F(x)部分</strong>。</p>
+<p>理论上，对于“随着网络加深，准确率下降”的问题，Resnet提供了两种选择方式，也就是identity mapping和residual mapping，如果网络已经到达最优，继续加深网络，residual mapping将被push为0，只剩下identity mapping，这样理论上网络一直处于最优状态了，网络的性能也就不会随着深度增加而降低了。</p>
+<p>真正在使用的ResNet模块并不是这么单一，文章中就提出了两种方式：</p>
+<p>见下方博客地址<br><a href="https://blog.csdn.net/lanran2/article/details/79057994" target="_blank" rel="noopener">博客</a></p>
+<p><strong>VGGNet和ResNet的对比如下图所示。ResNet最大的区别在于有很多的旁路将输入直接连接到后面的层</strong><br><img src="https://img-blog.csdn.net/20180710193619121?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMxODE1OTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="VGG-19,直连34层网络，ResNet34层网络对比"></p>
+<p>ResNet的两种残差模块<br>一种是以两个3*3的卷积网络串接在一起作为一个残差模块，另外一种是1*1、3*3、1*1的3个卷积网络串接在一起作为一个残差模块。他们如下图所示<br><img src="https://img-blog.csdn.net/20180710193638442?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMxODE1OTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="ResNet的两种残差模块"></p>
+<p>ResNet有不同的网络层数，比较常用的是50-layer，101-layer，152-layer。他们都是由上述的残差模块堆叠在一起实现的<br><img src="https://img-blog.csdn.net/20180710193652683?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMxODE1OTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="ResNet有不同的网络配置"></p>
+<blockquote>
+<p><a href="https://blog.csdn.net/u013181595/article/details/80990930" target="_blank" rel="noopener">https://blog.csdn.net/u013181595/article/details/80990930</a></p>
+</blockquote>
+<p>###<center>DensNet</center><br>DenseNet吸收了ResNet最精华的部分，并在此上做了更加创新的工作，使得网络性能进一步提升。提出了一个更激进的密集连接机制：即互相连接所有的层，具体来说就是每个层都会接受其前面所有层作为其额外的输入。</p>
+<p><strong>闪光点——密集连接：缓解梯度消失问题，加强特征传播，鼓励特征复用，极大的减少了参数量</strong></p>
+<p>DenseNet 是一种具有密集连接的卷积神经网络。在该网络中，任何两层之间都有直接的连接，也就是说，网络每一层的输入都是前面所有层输出的并集，而该层所学习的特征图也会被直接传给其后面所有层作为输入。下图是 DenseNet 的一个dense block示意图，一个block里面的结构如下，与ResNet中的BottleNeck基本一致，而一个DenseNet则由多个这种block组成。</p>
+<p>每个DenseBlock的之间层称为transition layers，由BN−&gt;Conv(1×1)−&gt;averagePooling(2×2)组成</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11692737-2acf9f631f285466?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" alt="DenseNet示意图"></p>
+<p>DenseNet 比其他网络效率更高，其关键就在于网络每层计算量的减少以及特征的重复利用。DenseNet则是让l层的输入直接影响到之后的所有层，它的输出为：xl=Hl([X0,X1,…,xl−1])，其中[x0,x1,…,xl−1]就是将之前的feature map以通道的维度进行合并。并且由于每一层都包含之前所有层的输出信息，因此其只需要很少的特征图就够了，这也是为什么DneseNet的参数量较其他模型大大减少的原因。这种dense connection相当于每一层都直接连接input和loss，因此就可以减轻梯度消失现象，这样更深网络不是问题</p>
+<p>需要明确一点，dense connectivity 仅仅是在一个dense block里的，不同dense block 之间是没有dense connectivity的，比如下图所示。</p>
+<p><img src="https://images2017.cnblogs.com/blog/1093303/201802/1093303-20180217132035937-2041404109.png" alt></p>
+<p>在同层深度下获得更好的收敛率，自然是有额外代价的。其代价之一，就是其恐怖如斯的内存占用。</p>
+<blockquote>
+<p><a href="https://www.imooc.com/article/36508" target="_blank" rel="noopener">https://www.imooc.com/article/36508</a></p>
+</blockquote>
+<p>###<center>Attention 机制</center></p>
+<p><strong>attention就是一个相似性的度量，其实就是一个当前的输入与输出的匹配度</strong>，当前的输入与目标状态越相似，那么在当前的输入的权重就会越大，说明当前的输出越依赖于当前的输入。严格来说，Attention并算不上是一种新的model，而仅仅是在以往的模型中加入attention的思想。</p>
+<p>没有attention机制的encoder-decoder结构通常把encoder的最后一个状态作为decoder的输入（可能作为初始化，也可能作为每一时刻的输入），但是encoder的state毕竟是有限的，存储不了太多的信息，对于decoder过程，每一个步骤都和之前的输入都没有关系了，只与这个传入的state有关。attention机制的引入之后，decoder根据时刻的不同，让每一时刻的输入都有所不同。<br>再引用tensorflow源码attention_decoder()函数关于attention的注释：<br>“In this context ‘attention’ means that, during decoding, the RNN can look up information in the additional tensor attention_states, and it does this by focusing on a few entries from the tensor.”</p>
+<p><a href="https://blog.csdn.net/u014665013/article/details/82619808" target="_blank" rel="noopener">attention讲解网址</a></p>
+<p>###<center>RNN</center></p>
+<p>###<center>BatchNorm的本质思想</center><br>BN的基本思想其实相当直观：因为深层神经网络在做非线性变换前的激活输入值（就是那个x=WU+B，U是输入）随着网络深度加深或者在训练过程中，其分布逐渐发生偏移或者变动，之所以训练收敛慢，一般是整体分布逐渐往非线性函数的取值区间的上下限两端靠近（对于Sigmoid函数来说，意味着激活输入值WU+B是大的负值或正值），所以这导致反向传播时低层神经网络的梯度消失，这是训练深层神经网络收敛越来越慢的本质原因，而BN就是通过一定的规范化手段，把每层神经网络任意神经元这个输入值的分布强行拉回到均值为0方差为1的标准正态分布，其实就是把越来越偏的分布强制拉回比较标准的分布，这样使得激活输入值落在非线性函数对输入比较敏感的区域，这样输入的小变化就会导致损失函数较大的变化，意思是这样让梯度变大，避免梯度消失问题产生，而且梯度变大意味着学习收敛速度快，能大大加快训练速度。</p>
+<p>THAT’S IT。其实一句话就是：对于每个隐层神经元，把逐渐向非线性函数映射后向取值区间极限饱和区靠拢的输入分布强制拉回到均值为0方差为1的比较标准的正态分布，使得非线性变换函数的输入值落入对输入比较敏感的区域，以此避免梯度消失问题。因为梯度一直都能保持比较大的状态，所以很明显对神经网络的参数调整效率比较高，就是变动大，就是说向损失函数最优值迈动的步子大，也就是说收敛地快。BN说到底就是这么个机制，方法很简单，道理很深刻。</p>
+]]></content>
       <categories>
-          
-          <category> hexo </category>
-          
+        <category>机器学习</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>LaTex</title>
-      <link href="/2019/06/30/LaTex/"/>
-      <url>/2019/06/30/LaTex/</url>
-      
-        <content type="html"><![CDATA[<ol><li>软件安装</li></ol><p>安装CTeX完整版稳定版本，网址：<a href="http://www.ctex.org/CTeXDownload" target="_blank" rel="noopener">http://www.ctex.org/CTeXDownload</a></p><p>安装WinEdt，网址：<a href="http://www.winedt.com/download.html" target="_blank" rel="noopener">http://www.winedt.com/download.html</a></p><a id="more"></a><p><img src="/2019/06/30/LaTex/1.PNG" alt="CTEX版本"></p><ol start="2"><li>文档结构</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">\documentclass[A]&#123;B&#125; % 指明文档类型</span><br><span class="line">\usepackage&#123;...&#125; % 载入宏包</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">\title&#123;...&#125; % 标题</span><br><span class="line">\author&#123;...&#125; % 作者</span><br><span class="line">\date&#123;...&#125; % 日期，若无这句话则默认显示当前日期，若大括号内为空则不显示日期</span><br><span class="line">\maketitle % 制作题目</span><br><span class="line">\tableofcontents % 制作目录</span><br><span class="line">\part&#123;...&#125; % 部分标题</span><br><span class="line">\chapter&#123;...&#125; % 章标题（article类文档中，不能用）</span><br><span class="line">\section&#123;...&#125; % 节标题（常用）</span><br><span class="line">\subsection&#123;...&#125; % 小节标题（常用）</span><br><span class="line">\subsubsection&#123;...&#125; % 子节标题（常用）</span><br><span class="line">\paragraph&#123;...&#125; % 段标题</span><br><span class="line">\subparagraph&#123;...&#125; % 小段标题</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure><p>\documentclass[A]{B}指明文档类型，A是选项，B是文档类型。</p><p>◦ B指明文档类型，包括article、report、book、slides。<br>◾ article：排版科技期刊、短报告、程序文档、邀请函等。<br>◾ report：排版多章节的长报告、短篇的书籍、博士论文等。<br>◾ book：排版书籍。<br>◾ slides：排版幻灯片。</p><p>◦ A设置文档类的一些选项。<br>◾ 纸张大小：a4paper、a5paper、b4paper、letterpaper、legalpaper、executivepaper。<br>◾ 字体大小：10pt、11pt、12pt。<br>◾ 纸张方向：portrait、landscape。<br>◾ 草稿定稿：draft、final。<br>◾ 单面双面：oneside、twoside。<br>◾ 新章开始：openright、openany，仅对book类文档有效。</p><p>• \usepackage{…} /载入宏包</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">\usepackage&#123;graphicx&#125; &#x2F;插入图片</span><br><span class="line">\usepackage&#123;hyperref&#125; &#x2F;超链接</span><br><span class="line">\usepackage&#123;booktabs&#125; &#x2F;创建没有竖线分隔的三线表格</span><br><span class="line">\usepackage&#123;multirow&#125; &#x2F;创建跨行表格</span><br><span class="line">\usepackage&#123;amsmath&#125;  &#x2F;引入一些改进的数学环境</span><br><span class="line">\usepackage&#123;algorithm&#125;、\usepackage&#123;algorithmic&#125; &#x2F;算法伪代码</span><br></pre></td></tr></table></figure><p>• 在\documentclass[A]{B}和\begin{document}命令之间的部分称为导言区，一般用于载入宏包、定义命令和调整格式。<br>• 在\begin{document}和\end{document}之间的部分称为正文区，一般用于正文内容的撰写。</p><p>3.列表</p><p><strong>无序列表</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;itemize&#125;</span><br><span class="line">\item javascript</span><br><span class="line">\item html</span><br><span class="line">\item css</span><br><span class="line">\end&#123;itemize&#125;</span><br></pre></td></tr></table></figure><p><img src="/2019/06/30/LaTex/2.PNG" alt></p><p><strong>有序列表</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;enumerate&#125;</span><br><span class="line">\item javascript</span><br><span class="line">\item html</span><br><span class="line">\item css</span><br><span class="line">\end&#123;enumerate&#125;</span><br></pre></td></tr></table></figure><p><img src="/2019/06/30/LaTex/3.PNG" alt></p><p><strong>描述列表</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;description&#125;</span><br><span class="line">\item[javascript] javascript</span><br><span class="line">\item[html] html</span><br><span class="line">\item[css] css</span><br><span class="line">\end&#123;description&#125;</span><br></pre></td></tr></table></figure><p><img src="/2019/06/30/LaTex/4.PNG" alt></p><ol start="4"><li>表格</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;tabular&#125;&#123;||||&#125;</span><br><span class="line">\hline</span><br><span class="line">% after \\: \hline or \cline&#123;col1-col2&#125; \cline&#123;col3-col4&#125; ...</span><br><span class="line">&amp; &amp; \\</span><br><span class="line">&amp; &amp; \\</span><br><span class="line">&amp; &amp; \\</span><br><span class="line">\hline</span><br><span class="line">\end&#123;tabular&#125;</span><br></pre></td></tr></table></figure><p>• tabular环境的参数 l、c 和r 分别表示左对齐、居中对齐和右对齐； | 指明各列之间有竖线分隔，如果在某些地方不需要竖线，去掉相应<br>位置的 | 即可；p{} 指明列的文本宽度（建议列的宽度至少大于一个单词的宽度，否则第一行可能不会换行），列中文本按该宽度自动换<br>行。<br>• 表格各行的元素之间用 &amp; 号分隔，两行内容用 \ 分隔。 \hline 表示两行之间的横线，你可以用连续两个 \hline 得到双横线，或者去掉<br>\hline 以不显示该横线。<br>• \emph{斜体}、\textbf{加粗}、\underline{下划线}。</p><ol start="5"><li><p>图片<br><code>\includegraphics[A]{B}</code><br>◦ A：图片的参数，比如height（高度）、width（宽度）、scale（缩放比例）、angle（角度）、keepaspectratio（是否保持原有的<br>宽高比）等。<br>◦ B：图片的路径。</p></li><li><p>浮动体</p></li></ol><p><strong>浮动表格</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;table&#125;[A]</span><br><span class="line">\centering</span><br><span class="line">...</span><br><span class="line">\caption&#123;B]\label&#123;C&#125;</span><br><span class="line">\end&#123;table&#125;</span><br></pre></td></tr></table></figure><p>• A：浮动体的位置选项。浮动体位置选项的指定是一个组合问题，而不是排列问题。<br>◦ h：表示如有可能，则放在当前位置。<br>◦ t：表示该浮动体会尝试放在一页的顶部。<br>◦ b：表示该浮动体会尝试放在一页的底部。<br>◦ p：浮动页，此类浮动体会尝试单独成页。<br>◦ !：表示忽略一些严格的限制条件。<br>• B：表格的标题。<br>• C：表格的标签，文章中用\ref{C}来引用。</p><p><strong>浮动图片</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;figure&#125;[A]</span><br><span class="line">\centering</span><br><span class="line">\includegraphics[]&#123;&#125;</span><br><span class="line">\caption&#123;B&#125;\label&#123;C&#125;</span><br><span class="line">\end&#123;figure&#125;</span><br></pre></td></tr></table></figure><p>• A：浮动体的位置选项。<br>• B：图片的标题。<br>• C：图片的标签，文章中用\ref{C}来引用。</p><ol start="7"><li>公式</li></ol><p><strong>行内公式</strong> $$</p><p><strong>行间公式</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;equation&#125;\label&#123;...&#125;</span><br><span class="line">...</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure><p><strong>多行公式</strong></p><p>◦ \nonumber取消公式编号<br>◦ \begin{eqnarray<em>}…\end{eqnarray</em>}取消全部公式编号</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;eqnarray&#125;</span><br><span class="line">% \nonumber to remove numbering (before each equation)</span><br><span class="line">a &amp;&#x3D;&amp; b \\</span><br><span class="line">c &amp;&#x3D;&amp; d</span><br><span class="line">\end&#123;eqnarray&#125;</span><br></pre></td></tr></table></figure><ol start="8"><li>引用（使用BibTex数据库管理参考文献）</li></ol><p>• 创建BibTex文件，后缀名为.bib，将所有参考文献的BibTex引用添加到文件中（有的网站提供的BibTex引用中包含&amp;字符，会导致编译<br>出错，此时可以将&amp;改成&amp;，可以解决此类问题；注意：由于之前编译出错，可能会导致修改为正确代码时编译依然出错，此时可以删<br>掉文件中自动生成的.bbl文件，重新编译即可）。<br>• 使用\bibliographystyle{A}设置参考文献的类型。A为类型名，例如plain，unsrt，acm等。<br>• 文章中用\cite{B}来引用文献。B是引用文章的名称，是大括号内的第一项内容。<br>• \bibliography{C}来生成参考文献列表。C是BibTex的文件名，不包含.bib后缀。<br>• 编译.tex文件的过程。<br>◦ 以PDFLaTex的方式编译一遍.tex文件<br>◦ 以BibTex的方式编译一遍.tex文件<br>◦ 以PDFLaTex的方式编译一遍.tex文件，这时出现参考文献列表<br>◦ 以PDFLaTex的方式编译一遍.tex文件</p>]]></content>
-      
-      
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LaTex</title>
+    <url>/2019/06/30/LaTex/</url>
+    <content><![CDATA[<ol>
+<li>软件安装</li>
+</ol>
+<p>安装CTeX完整版稳定版本，网址：<a href="http://www.ctex.org/CTeXDownload" target="_blank" rel="noopener">http://www.ctex.org/CTeXDownload</a></p>
+<p>安装WinEdt，网址：<a href="http://www.winedt.com/download.html" target="_blank" rel="noopener">http://www.winedt.com/download.html</a></p>
+<a id="more"></a>
+
+<p><img src="/2019/06/30/LaTex/1.PNG" alt="CTEX版本"></p>
+<ol start="2">
+<li>文档结构</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass[A]&#123;B&#125; % 指明文档类型</span><br><span class="line">\usepackage&#123;...&#125; % 载入宏包</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">\title&#123;...&#125; % 标题</span><br><span class="line">\author&#123;...&#125; % 作者</span><br><span class="line">\date&#123;...&#125; % 日期，若无这句话则默认显示当前日期，若大括号内为空则不显示日期</span><br><span class="line">\maketitle % 制作题目</span><br><span class="line">\tableofcontents % 制作目录</span><br><span class="line">\part&#123;...&#125; % 部分标题</span><br><span class="line">\chapter&#123;...&#125; % 章标题（article类文档中，不能用）</span><br><span class="line">\section&#123;...&#125; % 节标题（常用）</span><br><span class="line">\subsection&#123;...&#125; % 小节标题（常用）</span><br><span class="line">\subsubsection&#123;...&#125; % 子节标题（常用）</span><br><span class="line">\paragraph&#123;...&#125; % 段标题</span><br><span class="line">\subparagraph&#123;...&#125; % 小段标题</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+
+<p>\documentclass[A]{B}指明文档类型，A是选项，B是文档类型。</p>
+<p>◦ B指明文档类型，包括article、report、book、slides。<br>◾ article：排版科技期刊、短报告、程序文档、邀请函等。<br>◾ report：排版多章节的长报告、短篇的书籍、博士论文等。<br>◾ book：排版书籍。<br>◾ slides：排版幻灯片。</p>
+<p>◦ A设置文档类的一些选项。<br>◾ 纸张大小：a4paper、a5paper、b4paper、letterpaper、legalpaper、executivepaper。<br>◾ 字体大小：10pt、11pt、12pt。<br>◾ 纸张方向：portrait、landscape。<br>◾ 草稿定稿：draft、final。<br>◾ 单面双面：oneside、twoside。<br>◾ 新章开始：openright、openany，仅对book类文档有效。</p>
+<p>• \usepackage{…} /载入宏包</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\usepackage&#123;graphicx&#125; &#x2F;插入图片</span><br><span class="line">\usepackage&#123;hyperref&#125; &#x2F;超链接</span><br><span class="line">\usepackage&#123;booktabs&#125; &#x2F;创建没有竖线分隔的三线表格</span><br><span class="line">\usepackage&#123;multirow&#125; &#x2F;创建跨行表格</span><br><span class="line">\usepackage&#123;amsmath&#125;  &#x2F;引入一些改进的数学环境</span><br><span class="line">\usepackage&#123;algorithm&#125;、\usepackage&#123;algorithmic&#125; &#x2F;算法伪代码</span><br></pre></td></tr></table></figure>
+
+<p>• 在\documentclass[A]{B}和\begin{document}命令之间的部分称为导言区，一般用于载入宏包、定义命令和调整格式。<br>• 在\begin{document}和\end{document}之间的部分称为正文区，一般用于正文内容的撰写。</p>
+<p>3.列表</p>
+<p><strong>无序列表</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;itemize&#125;</span><br><span class="line">\item javascript</span><br><span class="line">\item html</span><br><span class="line">\item css</span><br><span class="line">\end&#123;itemize&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/06/30/LaTex/2.PNG" alt></p>
+<p><strong>有序列表</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;enumerate&#125;</span><br><span class="line">\item javascript</span><br><span class="line">\item html</span><br><span class="line">\item css</span><br><span class="line">\end&#123;enumerate&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/06/30/LaTex/3.PNG" alt></p>
+<p><strong>描述列表</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;description&#125;</span><br><span class="line">\item[javascript] javascript</span><br><span class="line">\item[html] html</span><br><span class="line">\item[css] css</span><br><span class="line">\end&#123;description&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/06/30/LaTex/4.PNG" alt></p>
+<ol start="4">
+<li>表格</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;tabular&#125;&#123;||||&#125;</span><br><span class="line">\hline</span><br><span class="line">% after \\: \hline or \cline&#123;col1-col2&#125; \cline&#123;col3-col4&#125; ...</span><br><span class="line">&amp; &amp; \\</span><br><span class="line">&amp; &amp; \\</span><br><span class="line">&amp; &amp; \\</span><br><span class="line">\hline</span><br><span class="line">\end&#123;tabular&#125;</span><br></pre></td></tr></table></figure>
+
+<p>• tabular环境的参数 l、c 和r 分别表示左对齐、居中对齐和右对齐； | 指明各列之间有竖线分隔，如果在某些地方不需要竖线，去掉相应<br>位置的 | 即可；p{} 指明列的文本宽度（建议列的宽度至少大于一个单词的宽度，否则第一行可能不会换行），列中文本按该宽度自动换<br>行。<br>• 表格各行的元素之间用 &amp; 号分隔，两行内容用 \ 分隔。 \hline 表示两行之间的横线，你可以用连续两个 \hline 得到双横线，或者去掉<br>\hline 以不显示该横线。<br>• \emph{斜体}、\textbf{加粗}、\underline{下划线}。</p>
+<ol start="5">
+<li><p>图片<br><code>\includegraphics[A]{B}</code><br>◦ A：图片的参数，比如height（高度）、width（宽度）、scale（缩放比例）、angle（角度）、keepaspectratio（是否保持原有的<br>宽高比）等。<br>◦ B：图片的路径。</p>
+</li>
+<li><p>浮动体</p>
+</li>
+</ol>
+<p><strong>浮动表格</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;table&#125;[A]</span><br><span class="line">\centering</span><br><span class="line">...</span><br><span class="line">\caption&#123;B]\label&#123;C&#125;</span><br><span class="line">\end&#123;table&#125;</span><br></pre></td></tr></table></figure>
+
+<p>• A：浮动体的位置选项。浮动体位置选项的指定是一个组合问题，而不是排列问题。<br>◦ h：表示如有可能，则放在当前位置。<br>◦ t：表示该浮动体会尝试放在一页的顶部。<br>◦ b：表示该浮动体会尝试放在一页的底部。<br>◦ p：浮动页，此类浮动体会尝试单独成页。<br>◦ !：表示忽略一些严格的限制条件。<br>• B：表格的标题。<br>• C：表格的标签，文章中用\ref{C}来引用。</p>
+<p><strong>浮动图片</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;figure&#125;[A]</span><br><span class="line">\centering</span><br><span class="line">\includegraphics[]&#123;&#125;</span><br><span class="line">\caption&#123;B&#125;\label&#123;C&#125;</span><br><span class="line">\end&#123;figure&#125;</span><br></pre></td></tr></table></figure>
+
+<p>• A：浮动体的位置选项。<br>• B：图片的标题。<br>• C：图片的标签，文章中用\ref{C}来引用。</p>
+<ol start="7">
+<li>公式</li>
+</ol>
+<p><strong>行内公式</strong> $$</p>
+<p><strong>行间公式</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;equation&#125;\label&#123;...&#125;</span><br><span class="line">...</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>多行公式</strong></p>
+<p>◦ \nonumber取消公式编号<br>◦ \begin{eqnarray<em>}…\end{eqnarray</em>}取消全部公式编号</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;eqnarray&#125;</span><br><span class="line">% \nonumber to remove numbering (before each equation)</span><br><span class="line">a &amp;&#x3D;&amp; b \\</span><br><span class="line">c &amp;&#x3D;&amp; d</span><br><span class="line">\end&#123;eqnarray&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>引用（使用BibTex数据库管理参考文献）</li>
+</ol>
+<p>• 创建BibTex文件，后缀名为.bib，将所有参考文献的BibTex引用添加到文件中（有的网站提供的BibTex引用中包含&amp;字符，会导致编译<br>出错，此时可以将&amp;改成&amp;，可以解决此类问题；注意：由于之前编译出错，可能会导致修改为正确代码时编译依然出错，此时可以删<br>掉文件中自动生成的.bbl文件，重新编译即可）。<br>• 使用\bibliographystyle{A}设置参考文献的类型。A为类型名，例如plain，unsrt，acm等。<br>• 文章中用\cite{B}来引用文献。B是引用文章的名称，是大括号内的第一项内容。<br>• \bibliography{C}来生成参考文献列表。C是BibTex的文件名，不包含.bib后缀。<br>• 编译.tex文件的过程。<br>◦ 以PDFLaTex的方式编译一遍.tex文件<br>◦ 以BibTex的方式编译一遍.tex文件<br>◦ 以PDFLaTex的方式编译一遍.tex文件，这时出现参考文献列表<br>◦ 以PDFLaTex的方式编译一遍.tex文件</p>
+]]></content>
       <categories>
-          
-          <category> LaTex </category>
-          
+        <category>LaTex</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> LaTex </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>CNN、ResNet、DenseNet</title>
-      <link href="/2019/06/16/CNN-ResNet-DenseNet/"/>
-      <url>/2019/06/16/CNN-ResNet-DenseNet/</url>
-      
-        <content type="html"><![CDATA[<p>总结CNN、ResNet、DenseNet。 </p><a id="more"></a><p>总结：</p><p>LeNet是第一个成功应用于手写字体识别的卷积神经网络 ALexNet展示了卷积神经网络的强大性能，开创了卷积神经网络空前的高潮</p><p>ZFNet通过可视化展示了卷积神经网络各层的功能和作用</p><p>VGG采用堆积的小卷积核替代采用大的卷积核，堆叠的小卷积核的卷积层等同于单个的大卷积核的卷积层，不仅能够增加决策函数的判别性还能减少参数量</p><p>GoogleNet增加了卷积神经网络的宽度，在多个不同尺寸的卷积核上进行卷积后再聚合，并使用1*1卷积降维减少参数量</p><p>ResNet解决了网络模型的退化问题，允许神经网络更深<br>注：关于AlexNet，GoogleNet，VGG和ResNet网络架构的demo代码见：<a href="https://github.com/skloisMary/demo-Network.git" target="_blank" rel="noopener">https://github.com/skloisMary/demo-Network.git</a></p><p>参考博客:</p><p>AlexNet、ZFNet、VGGNet、GoogleNet和ResNet模型<br><a href="https://blog.csdn.net/weixin_42111770/article/details/80719302" target="_blank" rel="noopener">https://blog.csdn.net/weixin_42111770/article/details/80719302</a>**</p><p>GoogLeNet（从Inception v1到v4的演进）<br><a href="https://my.oschina.net/u/876354/blog/1637819" target="_blank" rel="noopener">https://my.oschina.net/u/876354/blog/1637819</a>**</p><hr><p>各种CNN变形</p><blockquote><p><a href="https://www.cnblogs.com/skyfsm/p/8451834.html" target="_blank" rel="noopener">https://www.cnblogs.com/skyfsm/p/8451834.html</a></p></blockquote><p>###<center>CNN</center><br>在计算机视觉领域，卷积神经网络（CNN）已经成为最主流的方法，比如最近的GoogLenet，VGG-19，Incepetion等模型。</p><p>使用CNN作为基本构建块，为了减少顺序计算的模型有the Extended Neural GPU, ByteNet and ConvS2S，它们并行计算所有input的hidden representations和 output 的 positions。 在这些模型中，关联来自两个任意输入或输出位置的信号所需的操作数量，随距离的增长，对于ConvS2S呈线性增长，对于ByteNet呈对数增长。</p><p>###<center>VGG</center><br><img src="https://images2017.cnblogs.com/blog/1093303/201802/1093303-20180217131751843-269987601.png" alt></p><p>###<center>GoogLeNe</center></p><p>###<center>ResNet深度残差网络(允许网络尽可能的加深)</center></p><p><strong>ResNet可以解决“随着网络加深，准确率不下降”的问题</strong><br>ResNet模型是CNN史上的一个里程碑事件，核心是通过<strong>建立前面层与后面层之间的“短路连接”，这有助于训练过程中梯度的反向传播，从而能训练出更深的CNN网络</strong>，从而实现更高的准确度。</p><p>针对这个问题提出了一种全新的网络，叫深度残差网络，它允许网络尽可能的加深，其中引入了全新的结构如图：</p><p><img src="https://img-blog.csdn.net/20180114184946861?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGFucmFuMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="ResNet结构图"></p><p>其中ResNet提出了两种mapping：</p><p>一种是identity mapping，指的就是图1中”弯弯的曲线”，另一种residual mapping，指的就是除了”弯弯的曲线“那部分，所以最后的输出是 y=F(x)+xy=F(x)+x </p><p>identity mapping顾名思义，就是指本身，也就是公式中的xx，而residual mapping指的是“差”，也就是y−xy−x，所以<strong>残差指的就是F(x)部分</strong>。</p><p>理论上，对于“随着网络加深，准确率下降”的问题，Resnet提供了两种选择方式，也就是identity mapping和residual mapping，如果网络已经到达最优，继续加深网络，residual mapping将被push为0，只剩下identity mapping，这样理论上网络一直处于最优状态了，网络的性能也就不会随着深度增加而降低了。</p><p>真正在使用的ResNet模块并不是这么单一，文章中就提出了两种方式：</p><p>见下方博客地址<br><a href="https://blog.csdn.net/lanran2/article/details/79057994" target="_blank" rel="noopener">博客</a></p><p><strong>VGGNet和ResNet的对比如下图所示。ResNet最大的区别在于有很多的旁路将输入直接连接到后面的层</strong><br><img src="https://img-blog.csdn.net/20180710193619121?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMxODE1OTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="VGG-19,直连34层网络，ResNet34层网络对比"></p><p>ResNet的两种残差模块<br>一种是以两个3*3的卷积网络串接在一起作为一个残差模块，另外一种是1*1、3*3、1*1的3个卷积网络串接在一起作为一个残差模块。他们如下图所示<br><img src="https://img-blog.csdn.net/20180710193638442?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMxODE1OTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="ResNet的两种残差模块"></p><p>ResNet有不同的网络层数，比较常用的是50-layer，101-layer，152-layer。他们都是由上述的残差模块堆叠在一起实现的<br><img src="https://img-blog.csdn.net/20180710193652683?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMxODE1OTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="ResNet有不同的网络配置"></p><blockquote><p><a href="https://blog.csdn.net/u013181595/article/details/80990930" target="_blank" rel="noopener">https://blog.csdn.net/u013181595/article/details/80990930</a></p></blockquote><p>###<center>DensNet</center><br>DenseNet吸收了ResNet最精华的部分，并在此上做了更加创新的工作，使得网络性能进一步提升。提出了一个更激进的密集连接机制：即互相连接所有的层，具体来说就是每个层都会接受其前面所有层作为其额外的输入。</p><p><strong>闪光点——密集连接：缓解梯度消失问题，加强特征传播，鼓励特征复用，极大的减少了参数量</strong></p><p>DenseNet 是一种具有密集连接的卷积神经网络。在该网络中，任何两层之间都有直接的连接，也就是说，网络每一层的输入都是前面所有层输出的并集，而该层所学习的特征图也会被直接传给其后面所有层作为输入。下图是 DenseNet 的一个dense block示意图，一个block里面的结构如下，与ResNet中的BottleNeck基本一致，而一个DenseNet则由多个这种block组成。</p><p>每个DenseBlock的之间层称为transition layers，由BN−&gt;Conv(1×1)−&gt;averagePooling(2×2)组成</p><p><img src="https://upload-images.jianshu.io/upload_images/11692737-2acf9f631f285466?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" alt="DenseNet示意图"></p><p>DenseNet 比其他网络效率更高，其关键就在于网络每层计算量的减少以及特征的重复利用。DenseNet则是让l层的输入直接影响到之后的所有层，它的输出为：xl=Hl([X0,X1,…,xl−1])，其中[x0,x1,…,xl−1]就是将之前的feature map以通道的维度进行合并。并且由于每一层都包含之前所有层的输出信息，因此其只需要很少的特征图就够了，这也是为什么DneseNet的参数量较其他模型大大减少的原因。这种dense connection相当于每一层都直接连接input和loss，因此就可以减轻梯度消失现象，这样更深网络不是问题</p><p>需要明确一点，dense connectivity 仅仅是在一个dense block里的，不同dense block 之间是没有dense connectivity的，比如下图所示。</p><p><img src="https://images2017.cnblogs.com/blog/1093303/201802/1093303-20180217132035937-2041404109.png" alt></p><p>在同层深度下获得更好的收敛率，自然是有额外代价的。其代价之一，就是其恐怖如斯的内存占用。</p><blockquote><p><a href="https://www.imooc.com/article/36508" target="_blank" rel="noopener">https://www.imooc.com/article/36508</a></p></blockquote><p>###<center>Attention 机制</center></p><p><strong>attention就是一个相似性的度量，其实就是一个当前的输入与输出的匹配度</strong>，当前的输入与目标状态越相似，那么在当前的输入的权重就会越大，说明当前的输出越依赖于当前的输入。严格来说，Attention并算不上是一种新的model，而仅仅是在以往的模型中加入attention的思想。</p><p>没有attention机制的encoder-decoder结构通常把encoder的最后一个状态作为decoder的输入（可能作为初始化，也可能作为每一时刻的输入），但是encoder的state毕竟是有限的，存储不了太多的信息，对于decoder过程，每一个步骤都和之前的输入都没有关系了，只与这个传入的state有关。attention机制的引入之后，decoder根据时刻的不同，让每一时刻的输入都有所不同。<br>再引用tensorflow源码attention_decoder()函数关于attention的注释：<br>“In this context ‘attention’ means that, during decoding, the RNN can look up information in the additional tensor attention_states, and it does this by focusing on a few entries from the tensor.”</p><p><a href="https://blog.csdn.net/u014665013/article/details/82619808" target="_blank" rel="noopener">attention讲解网址</a></p><p>###<center>RNN</center></p><p>###<center>BatchNorm的本质思想</center><br>BN的基本思想其实相当直观：因为深层神经网络在做非线性变换前的激活输入值（就是那个x=WU+B，U是输入）随着网络深度加深或者在训练过程中，其分布逐渐发生偏移或者变动，之所以训练收敛慢，一般是整体分布逐渐往非线性函数的取值区间的上下限两端靠近（对于Sigmoid函数来说，意味着激活输入值WU+B是大的负值或正值），所以这导致反向传播时低层神经网络的梯度消失，这是训练深层神经网络收敛越来越慢的本质原因，而BN就是通过一定的规范化手段，把每层神经网络任意神经元这个输入值的分布强行拉回到均值为0方差为1的标准正态分布，其实就是把越来越偏的分布强制拉回比较标准的分布，这样使得激活输入值落在非线性函数对输入比较敏感的区域，这样输入的小变化就会导致损失函数较大的变化，意思是这样让梯度变大，避免梯度消失问题产生，而且梯度变大意味着学习收敛速度快，能大大加快训练速度。</p><p>THAT’S IT。其实一句话就是：对于每个隐层神经元，把逐渐向非线性函数映射后向取值区间极限饱和区靠拢的输入分布强制拉回到均值为0方差为1的比较标准的正态分布，使得非线性变换函数的输入值落入对输入比较敏感的区域，以此避免梯度消失问题。因为梯度一直都能保持比较大的状态，所以很明显对神经网络的参数调整效率比较高，就是变动大，就是说向损失函数最优值迈动的步子大，也就是说收敛地快。BN说到底就是这么个机制，方法很简单，道理很深刻。</p>]]></content>
-      
-      
+      <tags>
+        <tag>LaTex</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Attention is all you need(Transformer模型)</title>
+    <url>/2019/06/05/Attention-is-all-you-need/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/songbinxu/article/details/80332992" target="_blank" rel="noopener">attention is all you need阅读笔记</a></p>
+<p><a href="https://blog.csdn.net/qq_41664845/article/details/84969266" target="_blank" rel="noopener">attention 详细讲解（重点）</a></p>
+<a id="more"></a>
+
+<h2 id="encoder-amp-decoder"><a href="#encoder-amp-decoder" class="headerlink" title="encoder &amp; decoder"></a>encoder &amp; decoder</h2><p><img src="/2019/06/05/Attention-is-all-you-need/attention2.png" alt="encoder &amp; decoder"><br><img src="/2019/06/05/Attention-is-all-you-need/attention4.png" alt="encoder &amp; decoder"></p>
+<h3 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h3><ul>
+<li><strong>self-attention的计算过程</strong> 实际用矩阵表示</li>
+</ul>
+<p><img src="/2019/06/05/Attention-is-all-you-need/attention3.png" alt="encoder &amp; decoder"><br><img src="/2019/06/05/Attention-is-all-you-need/4-1.png" alt="scaled dot-product attention计算公式"></p>
+<ul>
+<li><strong>Multi-Head Attention</strong></li>
+</ul>
+<p>用“Multi-headed”的机制来进一步完善self attention层的性能，在self attention中，我们有多个个Query / Key / Value权重矩阵。</p>
+<p>Transformer使用8个attention heads，每个attention head独立维护一套Q/K/V的权值矩阵，最后得到8个不同的Z矩阵。</p>
+<p>Multi-head attention使模型共同关注来自不同位置的不同表示子空间的信息。<br><img src="https://img-blog.csdnimg.cn/20181212192729754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNjY0ODQ1,size_16,color_FFFFFF,t_70" alt="multi-attention"></p>
+<p>然后把所有z矩阵拼为一个矩阵，再通过线性变换用一个矩阵W相乘，得到最终的输出。<br><img src="https://img-blog.csdnimg.cn/20181212193517381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNjY0ODQ1,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="/2019/06/05/Attention-is-all-you-need/4-2.png" alt="Multi-head attention计算公式"></p>
+<p><img src="https://img-blog.csdn.net/20180516172207728?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NvbmdiaW54dQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Multi-head attention示意图"></p>
+<ul>
+<li><strong>Decoder</strong></li>
+</ul>
+<p>当序列输入时，Encoder开始工作，最后在其顶层的Encoder输出矢量组成的列表，然后我们将其转化为一组attention的集合（K,V）。（K,V）将带入每个Decoder的“encoder-decoder attention”层中去计算（这样有助于decoder捕获输入序列的位置信息）。<br><img src="/2019/06/05/Attention-is-all-you-need/attention5.png" alt="encoder &amp; decoder"></p>
+<p>完成encoder阶段后，我们开始decoder阶段，decoder阶段中的每个步骤输出来自输出序列的元素。</p>
+<p>我们以下图的步骤进行训练，直到输出一个特殊的符号<end of sentence>，表示已经完成了。 The output of each step is fed to the bottom decoder in the next time step, and the decoders bubble up their decoding results just like the encoders did. 对于Decoder，和Encoder一样，我们在每个Decoder的输入做词嵌入并添加上表示每个字位置的位置编码。<br><img src="/2019/06/05/Attention-is-all-you-need/attention6.png" alt="encoder &amp; decoder"></end></p>
+<ul>
+<li><strong>Linear and Softmax</strong></li>
+</ul>
+<p>Decoder的输出是浮点数的向量列表,最终的线性层和softmax层把向量列表转化为单词。</p>
+<p>全连接线性层把训练过的所有单词的投影到一个向量中。softmax将这些分数转换为概率。选取概率最高的索引，然后通过这个索引找到对应的单词作为输出。<br><img src="/2019/06/05/Attention-is-all-you-need/attention7.png" alt="encoder &amp; decoder"></p>
+<ul>
+<li><strong>Applications of Attention in our Model</strong><br><img src="/2019/06/05/Attention-is-all-you-need/attention1.png" alt="Attention整体框架图"></li>
+</ul>
+<p>（1）在encoder-decoder attention layer中，queriers 会参考前面的 decoder层和 encoder 输出的 keys 和 values，类似seq2seq 模型中的经典encoder-decoder 注意力机制。</p>
+<p>（2）encoder包含self-attention层，在self-attention层中所有的key、value和query都来自前一层的encoder。这样encoder的每个位置都能去关注前一层encoder输出的所有位置。</p>
+<p>（3）类似encoder层，decoder中也有self-attention层。</p>
+<ul>
+<li>位置编码</li>
+</ul>
+<p>由于该模型不包含递归和没有卷积，为了使模型能够利用序列的顺序，必须增加关于序列中相对或绝对位置的信息。 因此，添加“positional encodings”到the input embeddings at the bottoms of the encoder and decoder stacks中。</p>
+]]></content>
       <categories>
-          
-          <category> 机器学习 </category>
-          
+        <category>机器学习</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 机器学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Attention is all you need(Transformer模型)</title>
-      <link href="/2019/06/05/Attention-is-all-you-need/"/>
-      <url>/2019/06/05/Attention-is-all-you-need/</url>
-      
-        <content type="html"><![CDATA[<p><a href="https://blog.csdn.net/songbinxu/article/details/80332992" target="_blank" rel="noopener">attention is all you need阅读笔记</a></p><p><a href="https://blog.csdn.net/qq_41664845/article/details/84969266" target="_blank" rel="noopener">attention 详细讲解（重点）</a></p><a id="more"></a><h2 id="encoder-amp-decoder"><a href="#encoder-amp-decoder" class="headerlink" title="encoder &amp; decoder"></a>encoder &amp; decoder</h2><p><img src="/2019/06/05/Attention-is-all-you-need/attention2.png" alt="encoder &amp; decoder"><br><img src="/2019/06/05/Attention-is-all-you-need/attention4.png" alt="encoder &amp; decoder"></p><h3 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h3><ul><li><strong>self-attention的计算过程</strong> 实际用矩阵表示</li></ul><p><img src="/2019/06/05/Attention-is-all-you-need/attention3.png" alt="encoder &amp; decoder"><br><img src="/2019/06/05/Attention-is-all-you-need/4-1.png" alt="scaled dot-product attention计算公式"></p><ul><li><strong>Multi-Head Attention</strong></li></ul><p>用“Multi-headed”的机制来进一步完善self attention层的性能，在self attention中，我们有多个个Query / Key / Value权重矩阵。</p><p>Transformer使用8个attention heads，每个attention head独立维护一套Q/K/V的权值矩阵，最后得到8个不同的Z矩阵。</p><p>Multi-head attention使模型共同关注来自不同位置的不同表示子空间的信息。<br><img src="https://img-blog.csdnimg.cn/20181212192729754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNjY0ODQ1,size_16,color_FFFFFF,t_70" alt="multi-attention"></p><p>然后把所有z矩阵拼为一个矩阵，再通过线性变换用一个矩阵W相乘，得到最终的输出。<br><img src="https://img-blog.csdnimg.cn/20181212193517381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNjY0ODQ1,size_16,color_FFFFFF,t_70" alt></p><p><img src="/2019/06/05/Attention-is-all-you-need/4-2.png" alt="Multi-head attention计算公式"></p><p><img src="https://img-blog.csdn.net/20180516172207728?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NvbmdiaW54dQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Multi-head attention示意图"></p><ul><li><strong>Decoder</strong></li></ul><p>当序列输入时，Encoder开始工作，最后在其顶层的Encoder输出矢量组成的列表，然后我们将其转化为一组attention的集合（K,V）。（K,V）将带入每个Decoder的“encoder-decoder attention”层中去计算（这样有助于decoder捕获输入序列的位置信息）。<br><img src="/2019/06/05/Attention-is-all-you-need/attention5.png" alt="encoder &amp; decoder"></p><p>完成encoder阶段后，我们开始decoder阶段，decoder阶段中的每个步骤输出来自输出序列的元素。</p><p>我们以下图的步骤进行训练，直到输出一个特殊的符号<end of sentence>，表示已经完成了。 The output of each step is fed to the bottom decoder in the next time step, and the decoders bubble up their decoding results just like the encoders did. 对于Decoder，和Encoder一样，我们在每个Decoder的输入做词嵌入并添加上表示每个字位置的位置编码。<br><img src="/2019/06/05/Attention-is-all-you-need/attention6.png" alt="encoder &amp; decoder"></end></p><ul><li><strong>Linear and Softmax</strong></li></ul><p>Decoder的输出是浮点数的向量列表,最终的线性层和softmax层把向量列表转化为单词。</p><p>全连接线性层把训练过的所有单词的投影到一个向量中。softmax将这些分数转换为概率。选取概率最高的索引，然后通过这个索引找到对应的单词作为输出。<br><img src="/2019/06/05/Attention-is-all-you-need/attention7.png" alt="encoder &amp; decoder"></p><ul><li><strong>Applications of Attention in our Model</strong><br><img src="/2019/06/05/Attention-is-all-you-need/attention1.png" alt="Attention整体框架图"></li></ul><p>（1）在encoder-decoder attention layer中，queriers 会参考前面的 decoder层和 encoder 输出的 keys 和 values，类似seq2seq 模型中的经典encoder-decoder 注意力机制。</p><p>（2）encoder包含self-attention层，在self-attention层中所有的key、value和query都来自前一层的encoder。这样encoder的每个位置都能去关注前一层encoder输出的所有位置。</p><p>（3）类似encoder层，decoder中也有self-attention层。</p><ul><li>位置编码</li></ul><p>由于该模型不包含递归和没有卷积，为了使模型能够利用序列的顺序，必须增加关于序列中相对或绝对位置的信息。 因此，添加“positional encodings”到the input embeddings at the bottoms of the encoder and decoder stacks中。</p>]]></content>
-      
-      
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RNN、 LSTM、 GRU</title>
+    <url>/2019/03/11/RNN-LSTM-GRU/</url>
+    <content><![CDATA[<ol>
+<li>RNN</li>
+</ol>
+<p>用来连接先前的信息到当前的任务上，我们仅仅需要知道先前的信息来执行当前的任务。当相关的信息和预测的词位置之间的间隔是非常小的，RNN 可以学会使用先前的信息。</p>
+<a id="more"></a>
+
+<p>但，当前相关信息和当前预测位置之间的间隔就肯定变得相当的大。不幸的是，在这个<strong>间隔不断增大时，RNN 会丧失学习到连接如此远的信息的能力</strong>。</p>
+<p>缺点：RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes。 （Google 《attention is all you need》提出）</p>
+<ol start="2">
+<li>LSTM</li>
+</ol>
+<p>LSTM 通过刻意的设计来避免长期依赖问题。<strong>记住长期的信息在实践中是 LSTM 的默认行为</strong>，而非需要付出很大代价才能获得的能力！</p>
+<p>但，LSTM的重复网络模块的结构很复杂，它实现了<strong>三个门计算，即遗忘门、输入门和输出门</strong>。</p>
+<ol start="3">
+<li>GRU（Gated Recurrent Unit）</li>
+</ol>
+<p><strong>GRU则是LSTM的一个变体</strong>，保持了LSTM的效果，同时<strong>结构更加简单</strong>，所以它也非常流行。</p>
+<p>GRU模型只有<strong>两个门</strong>了，分别为更新门和重置门。<strong>更新门</strong> 用于控制前一时刻的状态信息被带入到当前状态中的程度，更新门的值越大说明前一时刻的状态信息带入越多。<strong>重置门</strong> 用于控制忽略前一时刻的状态信息的程度，重置门的值越小说明忽略得越多。</p>
+<p><strong>GRU参数更少因此更容易收敛，但是数据集很大的情况下，LSTM表达性能更好</strong>。</p>
+<p><strong>GRU缺点：</strong>the output of GRU is always averaged to get utter level embeddings, ignoring one’s speaking style。（An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）提出） </p>
+<p><strong>解决办法</strong>：只将GRU的<strong>最后一个输出</strong>连接到affine以获得<strong>单个话语级特征</strong>，并进一步使用ResCNN来学习判别式说话人嵌入。以这种方式，不仅捕获了顺序性质，而且在嵌入中很好地建模了光谱相关性。</p>
+<ol start="4">
+<li>3D-Conv（C3D</li>
+</ol>
+<p>可以同时对外观和运动信息建模。</p>
+<p>，在有限的探究框架中，<strong>所有层使用3×3×3卷积核效果最好</strong>。</p>
+<p>15年ICCV的论文《Learning Spatiotemporal Feature with 3D Convolutional Networks》设计一种网络，把通过简单的线性分类器学到的<strong>特征称为为C3D</strong>(Convolutional 3D)，提出的C3D卷积网络是3D卷积网络的里程碑。</p>
+<p>C3D[2]是Facebook的一个工作，它主要是把2D Convolution扩展到3D。其原理如下图，我们知道2D的卷积操作是将卷积核在输入图像或特征图（feature map）上进行滑窗，得到下一层的特征图。例如，图(a)是在一个单通道的图像上做卷积，图(b)是在一个多通道的图像上做卷积（这里的多通道图像可以指同一张图片的3个颜色通道，也指多张堆叠在一起的帧，即一小段视频），最终的输出都是一张二维的特征图，也就是说，多通道的信息被完全压缩了。而在3D卷积中，为了保留时序的信息，对卷积核进行了调整，增加了一维时域深度。如图(c)所示，3D卷积的输出仍是一个三维的特征图。因此通过3D卷积，C3D可以直接处理视频，同时利用表观特征和时序特征。<br><img src="https://upload-images.jianshu.io/upload_images/1670295-a6b18283b9811f96" alt="2D 3D -convolution"></p>
+<p>该<strong>网络图如下</strong>：</p>
+<p><img src="/2019/03/11/RNN-LSTM-GRU/C3D.png" alt=" C3D架构"></p>
+<p><strong>网络图描述</strong>：该网络具有8个卷积层、5个池化层、两个全连接层，以及一个softmax输出层。所有3D卷积滤波器均为3×3×3，步长为1×1×1。为了保持早期的时间信息设置pool1核大小为1×2×2、步长1×2×2，其余所有3D池化层均为2×2×2，步长为2×2×2。每个全连接层有4096个输出单元。</p>
+<p>下图，在UCF101数据集上（101个人类动作类别的13,320个视频），与基于循环神经网络(RNN)的方法相比，<strong>C3D性能分别优于长期循环卷积网络(LRCN)和LSTM复合模型</strong>14.1％和9.4％。C3D特征既紧凑又具有识别力。</p>
+<p><img src="/2019/03/11/RNN-LSTM-GRU/C3D-2.png" alt="UCF101的动作识别结果"></p>
+<p> C3D与2015年最先进的方法相比。顶部：线性SVM的简单特征; 中间：仅采用RGB帧作为输入的方法；底部：使用多个特征（如光流、密集轨迹）组合的方法。结果表明c3D结合密集轨迹和SVM分类器效果最好</p>
+<p>–附：<br><img src="https://upload-images.jianshu.io/upload_images/9483503-e8ffa966b87f8954.png?imageMogr2/auto-orient/" alt="比较C3D与最好的公开结果。在一系列的基准上，C3D优于所有先前最好的报告方法，除了Sports-1M和UCF101。在UCF101，我们汇报了2组方法，第一组方法只使用了RGB帧作为输入，而第二组方法(括号里)使用了可能的特征(如：光流、改进的密集轨迹)"></p>
+<p><strong>基于pytorch的c3d模型代码</strong>：<a href="https://github.com/MRzzm/action-recognition-models-pytorch" target="_blank" rel="noopener" title="下载地址">https://github.com/MRzzm/action-recognition-models-pytorch</a></p>
+<ol start="5">
+<li>I3D</li>
+</ol>
+<p>I3D[3] 是 DeepMind 基于 C3D 作出的改进，值得一提的是 I3D 这篇文章也是发布 Kinetics数据集的文章。其创新点在于模型的权重初始化，如何将预训练好的2D ConvNets的权重赋值给3D ConvNets。具体地，将一张图像在时间维度上重复T次可以看作是一个（非常无聊的）T帧的视频，那么为了使该视频在3D结构上的输出和单帧图像在2D结构的输出相等，可以使3D卷积的权重等于2D卷积的权重重复T次，再将权重缩小T倍以保证输出一致。I3D在Kinetics数据集上进行预训练然后用于UCF101，其精度可达到98.0%。</p>
+<ol start="6">
+<li>P3D<br>《learning spatio-temporal representation with pseudo-3D residual networks》ICCV2017</li>
+</ol>
+<p>P3D[4]是MSRA基于C3D作出的改进，基本结构是把ResNet扩展为“伪”3D卷积，“伪”3D卷积的意思是利用一个1*3*3的2D空间卷积和3*1*1的1D时域卷积来模拟常用的3*3*3的3D卷积，如下图所示。P3D在参数数量、运行速度等方面对C3D作出了优化。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1670295-75b36291a15b976c" alt="P3D"></p>
+<p>GitHub链接<a href="https://github.com/ZhaofanQiu/pseudo-3d-residual-networks" target="_blank" rel="noopener" title="P3D GitHub链接">https://github.com/ZhaofanQiu/pseudo-3d-residual-networks</a></p>
+<ol start="7">
+<li>Transformer<br><a href="https://blog.csdn.net/songbinxu/article/details/80332992" target="_blank" rel="noopener">attention is all you need阅读笔记</a><br>Google在2017的《Attention is all you need》，提出解决sequence to sequence问题的transformer模型，用<strong>全attention的结构代替了lstm</strong>。<br>是第一个完全基于attention的序列转换模型，代替了encoder-decoder结构的递归网络，训练效果比之前的模型好。</li>
+</ol>
+<p><strong>RNN（或者LSTM，GRU等）</strong>的计算限制为是顺序的，也就是说RNN相关算法只能从左向右依次计算或者从右向左依次计算，这种机制带来了<strong>两个问题</strong>：</p>
+<p>1.时间片t的计算依赖t-1时刻的计算结果，这样<strong>限制了模型的并行能力，训练速度快</strong>；<br>2.顺序计算的过程中信息会丢失，尽管LSTM等门机制的结构一定程度上缓解了长期依赖的问题，但是对于<strong>特别长期的依赖现象</strong>,LSTM依旧无能为力。</p>
+<p><strong>创新之处</strong>在于提出了两个新的Attention机制，分别叫做 Scaled Dot-Product Attention 和 Multi-Head Attention。</p>
+<p><strong>局限/未来发展方向</strong>：</p>
+<ul>
+<li>当前仅用于文本形式的输入输出，还未使用到图像，语音，视频。</li>
+<li>使生成顺序更少。</li>
+</ul>
+<p><strong>Transformer代码</strong>已经发布在TensorFlow的tensor2tensor库中。</p>
+<ol start="8">
+<li>Two-Stream Network及其衍生系列(不理解)</li>
+</ol>
+<p>Two Stream[5]是VGG组的工作（不是UGG哦），其基本原理是训练两个ConvNets，分别对视频帧图像（spatial）和密集光流（temporal）进行建模，两个网络的结构是一样的，都是2D ConvNets，见下图。两个stream的网络分别对视频的类别进行判断，得到class score，然后进行分数的融合，得到最终的分类结果。</p>
+<p>可以看出Two-Stream和C3D是不同的思路，它所用的ConvNets都是2D ConvNets，对时序特征的建模体现在两个分支网络的其中一支上。Two-Stream的实验结果，在UCF101上达到88.0%的准确率。</p>
+<p>在spatial stream和temporal stream如何融合的问题上，有很多学者作出了改进。</p>
+<ul>
+<li><p>[6]在two stream network的基础上，利用3D Conv和3D Pooling进行spatial和temporal的融合，有点two stream + C3D的意思。另外，文章将两个分支的网络结构都换成了VGG-16。在UCF101的精度为92.5%。</p>
+</li>
+<li><p>TSN[7]是CUHK的工作，对进一步提高two stream network的性能进行了详尽的讨论。two stream在这里被用在视频片段（snippets）的分类上。关于two stream的输入数据类型，除去原有的视频帧图像和密集光流这两种输入外，文章发现加入warped optical flow也能对性能有所提高。在分支网络结构上尝试了GoogLeNet，VGG-16及BN-Inception三种网络结构，其中BN-Inception的效果最好。在训练策略上采用了跨模态预训练，正则化，数据增强等方法。在UCF101上达到94.2%的精度。</p>
+</li>
+</ul>
+<ol start="9">
+<li>TDD(不理解)<br>TDD[8]是对传统的iDT[9]算法的改进（iDT算法是深度学习以前最好的行为识别算法），它将轨迹特征和two-stream network结合使用，以two-stream network作为特征提取器，同时利用轨迹对特征进行选择，获得轨迹的深度卷积描述符，最后使用线性SVM进行视频分类。TDD是一个比较成功的传统方法与深度学习算法相结合的例子，在UCF上达到90.3%的精度。</li>
+</ol>
+<ol start="10">
+<li><p>ActionVLAD(不理解)<br>ActionVLAD[10]是一种特征融合的方式，它可以融合two stream的特征，C3D的特征以及其他网络结构的特征。其思想是对原有的特征计算残差并聚类，对不同时刻的帧进行融合，得到新的特征。ActionVLAD是对视频空间维度和时间维度的特征融合，使得特征的表达更全面。</p>
+</li>
+<li><p>Non-local Network(不理解)<br>Non-local Network[11]是Facebook何恺明和RBG两位大神近期的工作，非局部操作（non-local operations）为解决视频处理中时空域的长距离依赖打开了新的方向。我们知道，卷积结构只能捕捉数据的局部信息，它对于非局部特征的信息传递不够灵活。Non-local Network则根据所有帧所有位置的信息对某个位置进行调整。文章把这个block加在I3D上做了实验，在Charades上精度提升2%</p>
+</li>
+</ol>
+<p>scquence2senquence<br>encoder-decoder</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/qq_28743951/article/details/78974058" target="_blank" rel="noopener">https://blog.csdn.net/qq_28743951/article/details/78974058</a><br><a href="https://blog.csdn.net/wangyangzhizhou/article/details/77332582" target="_blank" rel="noopener">https://blog.csdn.net/wangyangzhizhou/article/details/77332582</a><br><a href="https://blog.csdn.net/pipisorry/article/details/84946653" target="_blank" rel="noopener">https://blog.csdn.net/pipisorry/article/details/84946653</a><br><a href="https://www.jianshu.com/p/e416b837351d" target="_blank" rel="noopener">https://www.jianshu.com/p/e416b837351d</a><br><a href="https://www.jianshu.com/p/526e90bb2ba0" target="_blank" rel="noopener">https://www.jianshu.com/p/526e90bb2ba0</a></p>
+</blockquote>
+]]></content>
       <categories>
-          
-          <category> 机器学习 </category>
-          
+        <category>机器学习</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 机器学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>action recognition 泛读</title>
-      <link href="/2019/04/22/action/"/>
-      <url>/2019/04/22/action/</url>
-      
-        <content type="html"><![CDATA[<p>总结多篇 action recognition 的论文</p><a id="more"></a><h3 id="Large-scale-Video-Classiﬁcation-with-Convolutional-Neural-Networks-CVPR2014"><a href="#Large-scale-Video-Classiﬁcation-with-Convolutional-Neural-Networks-CVPR2014" class="headerlink" title="Large-scale Video Classiﬁcation with Convolutional Neural Networks(CVPR2014)"></a>Large-scale Video Classiﬁcation with Convolutional Neural Networks(CVPR2014)</h3><ol><li><p>使用CNN拓变体，用于视频分类；</p></li><li><p>使用<strong>两种不同的分辨率的帧分别作为输入</strong>，输入到两个CNN中，在最后的两个全连接层将两个CNN统一起来；两个流分别是<strong>低分辨率的内容流</strong>和采用<strong>每一个帧中间部分的高分辨率流</strong>(如图1)；</p></li></ol><p><strong>高分辨率流学习灰度，高频特征，而低分辨率流模拟较低的频率和颜色</strong>。</p><p><img src="https://img-blog.csdn.net/20141008205106374?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p><ol start="3"><li>将从自建数据库学习到的CNN结构迁移到UCF-101数据集上面。</li></ol><p>在考虑时间关联性方面，作者提出了四种方案(如图2)，并且进行了相关实验，实验的结果表示这四种方面都能取得很好的结果。</p><p><strong>Slow Fusion网络效果最好 。</strong><br><img src="https://img-blog.csdn.net/20141008204957796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt> </p><ol start="4"><li>作者也做了关于迁移学习的实验，在迁移对为未训练的数据分类时，对最后一层softmax、最后两层softmax、整个网络分别再训练，得到了效果对比：仅训练最后两层softmax效果较好。<br><img src="/2019/04/22/action/Action_R_1-3.png" alt></li></ol><h3 id="Two-Stream-Convolutional-Networks-for-Action-Recognition-in-Videos（NIPS-2014）"><a href="#Two-Stream-Convolutional-Networks-for-Action-Recognition-in-Videos（NIPS-2014）" class="headerlink" title="Two-Stream Convolutional Networks for Action Recognition in Videos（NIPS 2014）"></a>Two-Stream Convolutional Networks for Action Recognition in Videos（NIPS 2014）</h3><p>阅读时间：2019年5月27日</p><p> <strong>1.Multi-task learning多任务学习</strong></p><p>Multi-tasklearning （多任务学习）是和single-task learning （单任务学习）相对的一种机器学习方法。拿大家经常使用的school data做个简单的对比，school data是用来预测学生成绩的回归问题的数据集，总共有139个中学的15362个学生，其中每一个中学都可以看作是一个预测任务。单任务学习就是忽略任务之间可能存在的关系分别学习139个回归函数进行分数的预测，或者直接将139个学校的所有数据放到一起学习一个回归函数进行预测。而多任务学习则看重任务之间的联系，通过联合学习，同时对139个任务学习不同的回归函数，既考虑到了任务之间的差别，又考虑到任务之间的联系，这也是多任务学习最重要的思想之一。</p><p>优势：能发掘这些子任务之间的关系，同时又能区分这些任务之间的差别。比如多标签图像的分类，人脸的识别等等。</p><p>方法：大致可以总结为两类，一是不同任务之间共享相同的参数（common parameter），二是挖掘不同任务之间隐藏的共有数据特征（latent feature）。</p><p>时间流使用多任务训练时，不论有无空间流，效果都比单任务训练效果好。</p><p><strong>2. two-stream 的连接方式</strong></p><p>连接时间和空间流的方法：（1）是在两个网络的full6或full7层的顶部训练一组全连接层，但会过度拟合。（2）使用平均或线性SVM融合softmax分数</p><p><img src="/2019/04/22/action/Action_R_2-1.png" alt></p><p><strong>3. 两种时间流堆栈方式</strong></p><p>（1）光流堆叠 Optical flow stacking ： 计算每两帧之间相同位置的光流，然后简单的stacking</p><p>（2）轨迹堆叠 Trajectory stacking ： 轨迹叠加就是假设第一帧的某个像素点，我们可以通过光流来追踪它在视频中的轨迹</p><p><img src="/2019/04/22/action/Action_R_2-2.png" alt></p><h3 id="Learning-Spatiotemporal-Features-with-3D-Convolutional-Networks-（CVPR-2015）"><a href="#Learning-Spatiotemporal-Features-with-3D-Convolutional-Networks-（CVPR-2015）" class="headerlink" title="Learning Spatiotemporal Features with 3D Convolutional Networks##（CVPR 2015）"></a>Learning Spatiotemporal Features with 3D Convolutional Networks##（CVPR 2015）</h3><p><a href="https://github.com/facebook/C3D" target="_blank" rel="noopener">代码</a></p><p>阅读时间：2019年5月28日</p><p><strong>1. 问题</strong></p><ul><li>2D卷积对时空特征的学习不好</li><li>本文将二维卷积推广到了三维，提取的特征高效、紧致、使用简单</li></ul><p><strong>2. 方法</strong></p><ul><li>用3D卷积网络，同时提取空间和时间信息</li><li>All 3D convolution kernels are 3 × 3 × 3 with stride 1</li><li>All pooling kernels are 2 × 2 × 2, except for pool1 is 1 × 2 × 2</li><li>学习到的特征输入到线性分类器(多分类线性SVM),分类效果好</li></ul><p><strong>3. 收获</strong></p><ul><li>3D卷积更加适合学习时域空域(spatiotemporal)特征学习</li><li>特征紧凑，计算效率高，易于训练和使用</li></ul><p><img src="/2019/04/22/action/Action_R_3-1.png" alt></p><p><strong>4. C3D学到了什么？</strong></p><p>观察到<strong>C3D首先关注前几帧中的appearance，并跟踪后续帧中的显着运动</strong>。Thus C3D differs from standard 2D ConvNets in that it selectively attends to both motion and appearance.</p><p><strong>可以在卷积层后使用反卷积，查看网络学到了什么。</strong></p><p>C3D可以很好地捕获外观和运动信息，因此与基于外观的深度特征的Imagenet结合没有任何好处。另一方面，<strong>将C3D与iDT结合起来是有益的</strong>，因为它们彼此高度互补。实际上，iDT是基于光流跟踪和低级梯度直方图的手工制作功能，而C3D则捕获高级抽象/语义信息。</p><p> ** # t-SNE：可视化**，能保持局部结构的能力，高维数据空间中距离相近的点投影到低维中仍然相近。use deconvolution to project the top activations of these clips back into image space</p><h3 id="Learning-Spatio-Temporal-Representation-with-Pseudo-3D-Residual-Networks-ICCV-2017-P3D"><a href="#Learning-Spatio-Temporal-Representation-with-Pseudo-3D-Residual-Networks-ICCV-2017-P3D" class="headerlink" title="Learning Spatio-Temporal Representation with Pseudo-3D Residual Networks##( ICCV 2017)  P3D"></a>Learning Spatio-Temporal Representation with Pseudo-3D Residual Networks##( ICCV 2017)  P3D</h3><p>使用的可视化代码<a href="https://github.com/auduno/deepdraw" target="_blank" rel="noopener">DeepDraw</a></p><p>阅读时间：2019年5月29日</p><p><strong>0. 为什么提该网络</strong></p><ul><li>如何更好地提取视频的空间时序特征信息对于视频内容的分析具有重要的意义；</li><li>2D卷积神经网络不能很好的学习到视频的时序信息，而看起来更加合理的3D卷积神经网络却需要大量的计算量，而且需要在没有预训练参数的情况下从头开始训练；</li><li>在2D Conv网络结构基础上增加pooling或者RNN的方法不能很好地提取视频的低层信息间的联系。</li></ul><p><strong>1. 问题</strong></p><ul><li>3D Convolutions对视频的时域空域特征学习更好</li><li>重头训练一个深的3D CNN会消耗大量成本和内存</li><li>随机初始化的三维卷积核需要大量精细标注的视频数据来进行训练</li><li>本文提出基于伪三维卷积和残差学习的神经网络模块</li><li>在CVPR 2017的Activity Net Challenge的Dense-Captioning任务中获得第一名</li></ul><p><strong>2. 方法</strong></p><p><img src="https://img-blog.csdn.net/2018031910343826?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTM5ODIxNjQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="P3D 的三种变体示意图"> </p><ul><li>the key component in each block is a combination of one 1 × 3 × 3 convolutional layer and one layer of 3 × 1 × 1 convolutions in a parallel or cascaded fashion, that takes the place of a standard 3 × 3 × 3 convolutional layer.</li><li>即 con3D = S + T = 1 × 3 × 3 + 3 × 1 × 1 如上图上部分所示</li><li>其中二维卷积核可以使用图像数据进行预训练，对于已标注视频数据的需求也会大大减少</li><li>P3D Blocks ：P3D-A，P3D-B，P3D-C 分别使用串行、并行和带捷径（shortcut）的串行三种方式，如上图中间部分所示</li><li>P3D ResNet：三种伪三维残差单元替代ResNet中的二维残差单元，如上图下部分所示</li></ul><p><strong>3. 收获</strong></p><ul><li>以后遇到时域的数据，可以增加一个网络学习</li><li>要设计非常深的网络时要借鉴残差网络的思想</li><li>训练非常深的3D CNN非常困难，需要很大的计算量。更重要的是，使用Sports-1M数据集中的帧直接微调ResNet-152可以获得比从头开始训练的C3D更高的准确度</li></ul><p>** # TDD特征：Trajectory-pooled Deep-convolutional Descriptor**<br>结合了hand-craft features 和 deep convolutional features两种提取特征的方式，</p><p>** # DeepDraw<strong>：P3D ResNet模型使用DeepDraw 来对模型学习的内容 **可视化</strong>。<a href="https://github.com/auduno/deepdraw" target="_blank" rel="noopener">https://github.com/auduno/deepdraw</a></p><p>整个过程分两步：</p><ul><li>利用cnn学习convolutional features</li><li>采用trajectory-constrained sample and pooling策略对convolutional features进行aggregate，形成descriptor。</li><li>利用费舍尔矢量将这些局部的TDDs aggregate成一个全局长矢量，再用svm分类。</li></ul><p>优点：</p><ul><li>自动的学习视频特征，避免了过多的hand-craft 提取。</li><li>考虑到了视频的时间特性，采用trajector-constrained sample and pooling对cnn自动学习到的特征进行aggregate。</li><li>并且证明了TDD其实就是各类hand-craft的融合。（our results demonstrate that our TDDs are complementary to those hand-crafted features (HOG, HOF, and MBH) and the fusion of them is able to further boost the recognition performance.）</li></ul><h3 id="Attentional-Pooling-for-Action-Recognition-NIPS-2017"><a href="#Attentional-Pooling-for-Action-Recognition-NIPS-2017" class="headerlink" title="Attentional Pooling for Action Recognition (NIPS 2017)"></a>Attentional Pooling for Action Recognition (NIPS 2017)</h3><p>阅读时间：2019年6月2日</p><p><a href="https://github.com/rohitgirdhar/AttentionalPoolingAction" target="_blank" rel="noopener">代码 https://github.com/rohitgirdhar/AttentionalPoolingAction</a></p><p><strong>1.问题</strong></p><ul><li>传统一阶注意力网络大多为学习一个locations*<br>1的mask向量，向量的值代表了对应位置上的权重，但是它没有挖掘到，location之间的关系或者说是相互作用的权重</li></ul><p><strong>2.方法</strong></p><ul><li><p><strong>Attentional pooling as low-rank approximation of second-order pooling</strong><br>Second-order pooling<br><img src="/2019/04/22/action/Action_R_4-1.png" alt="Second-order pooling"></p><p>Low-rank second-order pooling<br><img src="/2019/04/22/action/Action_R_4-2.png" alt="Second-order pooling"></p><p>Top-down attention<br><img src="/2019/04/22/action/Action_R_4-3.png" alt="Second-order pooling"></p></li><li><p><strong>融合 注意力和 低阶二阶池化</strong>，引入了一种简单的注意力表达式作为低阶二阶汇集，整合自下而上的显着性和自上而下的注意力。通过 Attention pooling 层可以学到一个二阶 attention 矩阵，而不仅仅只是一个 mask 向量，然后再 conbine 二阶和一阶的 mask ，就能得到更加精确的注意力关注区域<br><img src="/2019/04/22/action/Action_R_4-4.png" alt="Second-order pooling"></p></li></ul><p><strong># 目标检测网络</strong> <a href="https://www.cnblogs.com/skyfsm/p/6806246.html" target="_blank" rel="noopener">详细讲解</a><br>R-CNN、Fast R-CNN、Faster R-CNN</p><p><strong># 空间金字塔池化</strong><br>将金字塔思想加入到CNN，实现了<strong>数据的多尺度输入</strong>。一般CNN后接全连接层或者分类器，他们都需要固定的输入尺寸，因此不得不对输入数据进行crop或者warp，这些预处理会造成数据的丢失或几何的失真。</p><p>如下图所示，在卷积层和全连接层之间加入了SPP layer。此时网络的输入可以是任意尺度的，在SPP layer中每一个pooling的filter会根据输入调整大小，而SPP的输出尺度始终是固定的。<br><img src="https://images2015.cnblogs.com/blog/1093303/201705/1093303-20170504113433539-94801265.jpg" alt="金字塔SPP"></p><p><strong># TSN(Temporal Segment Networks)</strong></p><p>基于长范围时间结构，结合了稀疏时间采样策略来保证使用整段视频时学习得有效和高效。基于two-stream方法构建，但不同于two-stream采用单帧或者单堆帧，TSN使用从整个视频中稀疏地采样一系列短片段，每个片段都将给出其本身对于行为类别的初步预测，从这些片段的“共识”来得到视频级的预测结果。</p><p><img src="https://img-blog.csdn.net/20180319152830700" alt="TSN示意图"></p><p>由上图所示，一个输入视频被分为 KK 段（segment），一个片段（snippet）从它对应的段中随机采样得到。不同片段的类别得分采用段共识函数（The segmental consensus function）进行融合来产生段共识（segmental consensus），这是一个视频级的预测。然后对所有模式的预测融合产生最终的预测结果。</p><p><strong># ResNet 101、 BN-Inception模型＋注意力 比较</strong></p><p>两种模型在训练完整图像时表现差不多，但结合注意力后，R-101有4％的改进，I-V2不改善效果。</p><p>说明两模型的主要<strong>区别</strong>：Inception-style models在输入图片的初始层通过max-pooling快速下采样，这样在后续层计算成本降低，训练更快，但是它导致大多数层具有非常大的感受野，因此后来的神经元可以有效地访问所有图像像素。这表明最后一层的所有空间特征可能非常相似。</p><p>而R-101，逐渐降低空间分辨率，允许最后一层特征专注于图像的不同部分，因此更多地受益于注意力集中。<strong>输入的图片size需要稍大一些，以确保the last-layer features are sufficiently distinct to benefit from attentional pooling</strong>.</p><h3 id="Temporal-Segment-Networks-Towards-Good-Practices-for-Deep-Action-Recognition-ECCV2016"><a href="#Temporal-Segment-Networks-Towards-Good-Practices-for-Deep-Action-Recognition-ECCV2016" class="headerlink" title="Temporal Segment Networks: Towards Good Practices for Deep Action Recognition (ECCV2016)"></a>Temporal Segment Networks: Towards Good Practices for Deep Action Recognition (ECCV2016)</h3><p>阅读时间：</p><h3 id="TACNet-Transition-Aware-Context-Network-for-Spatio-Temporal-Action-Detection（CVPR2019）"><a href="#TACNet-Transition-Aware-Context-Network-for-Spatio-Temporal-Action-Detection（CVPR2019）" class="headerlink" title="TACNet: Transition-Aware Context Network for Spatio-Temporal Action Detection（CVPR2019）"></a>TACNet: Transition-Aware Context Network for Spatio-Temporal Action Detection（CVPR2019）</h3><p>阅读时间：2019.6.21</p><p><strong>1.问题</strong></p><ul><li><p><strong>之前方法的缺陷</strong>：空间-时间流方法动作识别方法将视频帧视为一组独立图像，无法利用视频的时间连续性</p></li><li><p><strong>之前方法的缺陷</strong>：ACT虽然采用堆叠策略来利用剪辑级检测的短期时间连续性，但仍无法提取长期时间上下文信息，显著提高识别性能。</p></li><li><p><strong>该网络克服的问题</strong>：提取长期时间背景信息，区分过渡状态，提出a common and differential mode scheme to accelerate the convergence of TACNet。</p></li></ul><p><strong>2.方法</strong></p><ul><li><p>提出转换感知上下文网络（TACNet）包括两个主要组件，即时间上下文检测器和转换感知分类器。</p></li><li><p><strong>时间上下文检测器</strong>可以通过构建循环网络（standard SSD framework, but can encode the long-term context information by embedding several multi-scale Bi-directional Conv-LSTM units）来提取具有恒定时间复杂度的长期上下文信息。</p></li><li><p>转变感知分类器可以通过同时分类动作和过渡状态来进一步区分过渡状态。因此，所提出的TACNet可以显着改善时空行为检测的性能</p></li><li><p>将Bi-ConvLSTM单元嵌入到SSD框架中以设计循环检测器。作为一种LSTM，ConvLSTM可以编码长期信息，更适合处理视频等时空数据。</p></li></ul><p><strong>3.收获</strong></p><p><strong>#</strong> SSD、ACT、Con-LSTM</p><p>-ACT detector：分析视频序列，检测某些动作发生的时空位置（起止时间和每一帧视频中的发生位置），即spatio-temporal action localization。</p><p>步骤：1.将每一帧的视频按照时序输入到SSD网络； 2.将SSD网络中的各层特征图按照STACK排列，简单说就是，将各层特征按照，同层特征横向排列，不同层特征纵向排列。这样就将各层的特征按照时序组织起来了。</p><p><img src="https://upload-images.jianshu.io/upload_images/1564401-38737505893bae67.png" alt="ACT-detector网络结构"></p><ul><li>SSD网络：目标检测</li></ul><hr><h2 id="3D-data"><a href="#3D-data" class="headerlink" title="3D data"></a><center>3D data</center></h2><h3 id="Describing-Local-Reference-Frames-for-3-D-Motion-Trajectory-Recognition-IEEE-access-2018"><a href="#Describing-Local-Reference-Frames-for-3-D-Motion-Trajectory-Recognition-IEEE-access-2018" class="headerlink" title="Describing Local Reference Frames for 3-D Motion Trajectory Recognition(IEEE access 2018)"></a>Describing Local Reference Frames for 3-D Motion Trajectory Recognition(IEEE access 2018)</h3><p>阅读时间：2019.6.17</p><p><strong>1. 问题</strong></p><ul><li><p>运动轨迹的原始数据或绘制简单的几何量不能表征3D点的方向变化。</p></li><li><p>高阶导数是3D点轨迹的一种完整描述符，可表示点的位置和方向变化，但对轨迹中的噪声敏感。</p></li></ul><p><strong>2. 方法</strong></p><ul><li><p><strong>使用弗莱纳(Frenet–Serret)公式(切向量t;  法向量n;  正常向量b)表示3D运动轨迹</strong></p></li><li><p><strong>欧拉旋转定理 + 平方根速度矢量 作为 descriptor</strong></p></li><li><p><strong>Fisher Vector作为输入</strong>：Fisher kernels对输入向量进行了编码，以一个新的梯度向量来表示原输入向量，这个新的梯度向量就是Fisher Vector。这样编码的好处在于可以<strong>将任意长度的输入向量转换成定长向量</strong></p></li></ul><p><strong>3. 收获</strong></p><p>-<strong>使用向量表示3D运动轨迹</strong>，G(t)={x(t),y(t),z(t),t是时间</p><p>轨迹用弗莱纳(Frenet–Serret)公式(切向量t;  法向量n;  正常向量b)表示<br><img src="/2019/04/22/action/Action_R_5-1.png" alt><br><img src="/2019/04/22/action/Action_R_5-2.png" alt></p><ul><li><strong>识别效果不如最好的实验，理由</strong>：1、我们只使用了唇部的数据，而其他的数据使用了整个脸部的数据；2、使用的160个唇部深度数据比RGB整个脸部或唇部图片小很多，训练速度快，占用内存少。</li><li><strong>提出</strong>了一种<strong>运动轨迹描述方法</strong>，在沿运动轨迹的每个点都用descriptor表示，描述了运动的方向</li><li>可以<strong>把descriptor 和原始数据拼接</strong>后放入神经网络；或分别用底层神经网络提取特征后在融合训练。</li></ul><p>** # 其他的3D数据描述方式 **</p><p>微分不变量、积分不变量、SRVF、多尺度SSM、3D形状背景、LRFb<br><img src="/2019/04/22/action/Action_R_5-3.png" alt></p><p>16年Convolutional Two-Stream Network Fusion for Video Action Recognition<br>此论文有公开源代码，用的是MATLAB。</p><p>17年Hidden Two-Stream Convolutional Networks for Action Recognition<br>此论文有公开源代码，用的是Caffe。</p><h1 id="可以尝试"><a href="#可以尝试" class="headerlink" title="可以尝试"></a>可以尝试</h1><p>C3D、 P3D、 attention</p><p>弗莱纳(Frenet–Serret)公式</p>]]></content>
-      
-      
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>action recognition 实现方式总结</title>
+    <url>/2019/02/25/action-recognition-2/</url>
+    <content><![CDATA[<ol>
+<li>早期尝试<br>Large-scale Video Classiﬁcation with Convolutional Neural Networks(2014)</li>
+</ol>
+<p>GitHub：<a href="https://cs.stanford.edu/people/karpathy/deepvideo/" target="_blank" rel="noopener">https://cs.stanford.edu/people/karpathy/deepvideo/</a></p>
+<a id="more"></a>
+
+<p>2DCNN, 能不能自动的捕捉运动信息?</p>
+<ul>
+<li><p>single frame</p>
+</li>
+<li><p>stacked frames</p>
+</li>
+</ul>
+<ol start="2">
+<li><p>双流法<br>Two-Stream Convolutional Networks for Action Recognition in Videos(2014)<br>双流架构:</p>
+<ul>
+<li><p>空域网络(spatial networks)  执行物体识别</p>
+</li>
+<li><p>时域网络(temporal networks)  识别运动信息</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>TSN: Temporal Segment Networks: Towards Good Practices for Deep Action Recognition(2016)</p>
+<ol start="3">
+<li><p>(光流的作用)<br>On the Integration of Optical Flow and Action Recognition(2017) (2018CVPR)</p>
+</li>
+<li><p>C3D<br>Learning Spatiotemporal Features with 3D Convolutional Networks(2015)</p>
+</li>
+<li><p>I3D(Two-Stream Inﬂated 3D ConvNet)<br>Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset</p>
+</li>
+</ol>
+<p><a href="https://blog.csdn.net/whfshuaisi/article/details/79116265" target="_blank" rel="noopener" title="action recognition论文汇总">action recognition论文汇总</a></p>
+]]></content>
       <categories>
-          
-          <category> action recognition </category>
-          
+        <category>action recognition</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> action recognition </tag>
-            
-            <tag> skeleton </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>说话人识别</title>
-      <link href="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/"/>
-      <url>/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/</url>
-      
-        <content type="html"><![CDATA[<p>多篇说话人识别论文总结</p><a id="more"></a><center>An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）</center><p>将话语映射到说话人身份子空间，其中说话者的相似性可以通过欧几里德距离来测量<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/speakeridentificationsystem.png" alt="speaker identification system"><br>注：<strong>speaker embedding是指唯一确定的0-1一维向量</strong>，属于目标人是1（唯一），向量其余元素是0</p><p>注：i-vector是声纹说话人识别中的说话人矢量<br><a href="https://blog.csdn.net/weixin_38206214/article/details/81096092" target="_blank" rel="noopener">i-vector<br>讲解博客</a></p><p>采用 GRU 来提取时间话语级别的特征，以保留一个人的说话风格。 然后，训练ResCNN模型来对说话人进行鲁棒嵌入。 最后，整个系统（包括GRU和ResCNN）通过使用所提出的损失函数联合优化，称为speaker identity subspace loss </p><ol><li><p><strong>数据输入</strong>：968个发言者，35,983句话，约27个小时的中文普通话发音。 每个人有大约37个话语，其持续时间大多在2到5秒左右。 通过随机选择100个说话者作为测试集，其他作为训练集。<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/1-1.png" alt="Data sets描述"></p></li><li><p><strong>GRU提取 utterance-level feature；</strong> contains more speaker characteristics</p></li></ol><p><strong>提出GRU缺点</strong>： the output of GRU is always averaged to get utter level embeddings, ignoring one’s speaking style。<strong>解决办法</strong>：只将GRU的<strong>最后一个输出</strong>连接到affine以获得<strong>单个话语级特征</strong>，并进一步使用ResCNN来学习判别式说话人嵌入。以这种方式，不仅捕获了顺序性质，而且在嵌入中很好地建模了光谱相关性。</p><ol start="3"><li><p><strong>ResCNN 假设一个“不同的话语”可以被视为理想说话者身份子空间中单个对象的变换。基于此假设，利用残差卷积神经网络（ResCNN）架构对变换进行建模</strong></p></li><li><p><strong>the speaker identity subspace loss</strong> significantly improves the discriminative ability of our system</p></li></ol><p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/2-1.png" alt="speaker verification identity subspace loss"><br>  注：hp, hq 是说话者p ,q的身份向量。 Rpq是说话者p,q的声音距离关系</p><p><strong>实验结果表明</strong>：<br>   该端到端系统性能更好，并且提出的说话者身份子空间丢失使得说话人身份嵌入更具辨别力。</p><p>同时，实验对比指出：</p><ol><li><strong>话语时长5s足以训练短时说话人识别系统</strong>。 此外，持续时间较长可能会带来进一步改善，但也带来冗余。</li><li><strong>每个人说 3-5 句话是比较合适的</strong>。</li></ol><hr><center>Generalized End-to-End Loss for Speaker Verification</center> Google 投 ICASSP2018<p>GE2E:具有新损失函数GE2E的模型通过将训练时间减少&gt; 60％，在更短的时间内将EER降低10％以上，从而学习更好的模型</p><p>先前工作背景：Tuple-Based End-to-End Loss（TE2E）<br><strong>TE2E原理（还没做）</strong></p><ol><li>数据输入</li></ol><p>GE2E的训练数据基于一次性的大数据量的语句，一个batch包含N个人，M句话/人。（Xji代表j说话者的第i句话）<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-1.png" alt="数据输入"></p><ol start="2"><li>GE2E的损失函数</li></ol><p>features extracted from each utterance xji——&gt;LSTM network——&gt;a linear layer——&gt;output:f(xji,w)<br>注：w是LSTM和linear layer的参数</p><p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-3.png" alt="embedding vector表达式"></p><p>eji（正则化后的vector） represents the embedding vector of the jth speaker’s ith utterance</p><p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-4.png" alt="相似矩阵Sji,k表达式"></p><p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-2.png" alt="cos(a,b)解释"></p><p>损失函数的两种算法</p><ul><li>softmax</li></ul><p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-5.png" alt="softmax的loss函数"></p><ul><li><p>contrast</p><p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-6.png" alt="相似矩阵Sji,k表达式"><br>正项对应于朝向cj（蓝色三角形）推动eji（蓝色圆圈）。 负项对应于拉动eji（蓝色圆圈）远离ck（红色三角形），因为ck与ck0相比更像eji。 因此，对比度损失使我们能够专注于困难的嵌入向量和负质心对。</p></li><li><p>两种损失函数比较：（1）两种函数都有用；（2）contrast损失对于td-sv表现更好，而softmax损失对于ti-sv表现稍好。</p></li></ul><p>注：在计算真实说话者的质心时移除eji使得训练稳定并有助于避免琐碎的解决方案。 因此，在计算负相似性时仍使用公式1（即k != j），但我们在k = j时使用公式8</p><p>综上所述：</p><p> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-7.png" alt></p><ol start="3"><li>TE2E、GE2E比较</li></ol><p><strong>a single batch in GE2E loss update</strong>: have N speakers,<br>each with M utterances. Each single step update will push all N×M embedding vectors toward their own centroids, and pull them away the other centroids.</p><p> all possible tuples in the** TE2E loss function** for each xji.（没看懂）</p><p>each update for xji in our GE2E loss is identical to at least 2(N − 1) steps in our TE2E loss，所以，GE2E比TE2E训练次数更少，更有效率。</p><ol start="4"><li>Training with MultiReader<br>利用多个不同的数据源来做。为每个数据源的损失函数设置不同的权重，权重越高该数据源越重要；求所有数据源的损失函数的加权和。</li></ol><p>5.1 Text-Dependent Speaker Verification实验</p><p><strong>训练数据</strong>有两个，（1）是 150M 句话 630K 说话者的“OK Google”<br> （2）是共 1.2M 句 18K 说话者的 “OK/Hey Google” 。第一个数据库比第二个大很多。</p><p><strong>Table1 测试数据</strong>： 665 speakers with an average of 4.5 enrollment utterances and 10 evaluation utterances per speaker</p><p><strong>Table2 测试数据</strong>：83 K different speakers and environmental conditions, from both anonymized logs and manual collections. We use an average of 7.3 enrollment utterances and 5 evaluation utterances per speaker.（<strong>the GE2E model took about 60% less training time than TE2E</strong>）</p><p><strong>测试结果</strong><br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-8.png" alt><br>注：The baseline model is a single layer LSTM with 512 nodes and an embedding vector size of 128 [13]. The second and third rows’ model architecture is 3-layer LSTM.</p><p>5.2 Text-Independent Speaker Verification实验<br> <strong>数据预处理</strong>divide training utterances into smaller segments, which we refer to as partial utterances. 不要求所有partial utterances具有相同的长度，但同一batch中的partial utterances所有必须具有相同的长度为t帧（140&lt;=t&lt;=180）.<br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-9.png" alt></p><p><strong>滑动窗口的处理</strong>for every utterance we apply a sliding window of fixed size (140 + 180)/2 = 160 frames with 50% overlap.<br>We compute the d-vector for each window. The final utterance-wise d-vector is generated by L2 normalizing the window-wise d-vectors, then taking the element-wise averge (as shown in Figure 4)</p><p><strong>训练数据</strong>：36M utterances from 18K speakers</p><p><strong>测试数据</strong>：1K speakers with in average 6.3 enrollment utterances and 7.2 evaluation utterances per speaker</p><p><strong>测试结果</strong></p><p>GE2E training was about 3× faster than the other loss functions。<br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-10.png" alt></p><ol start="6"><li>论文总结</li></ol><ul><li><p>提出了GE2E损失函数，该函数正确率高，且所需训练时间短。</p></li><li><p>引入了MultiReader技术来组合不同的数据源，使模型能够支持多个关键字和多种语言。</p></li><li><p>针对不同长度的utterance提出了切分的想法。</p></li></ul>]]></content>
-      
-      
+      <tags>
+        <tag>action recognition</tag>
+        <tag>skeleton</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【hexo】 Spawn failed at ChildProcess</title>
+    <url>/2020/03/04/hexo-Spawn-failed/</url>
+    <content><![CDATA[<p><img src="/2020/03/04/hexo-Spawn-failed/spawnfail.PNG" alt></p>
+<a id="more"></a>
+
+<p>在github上部署hexo博客时遇到问题。 </p>
+<p>hexo d出错。</p>
+<p>发生这种情况时，通常只需要在良好的网络条件下再次部署即可,可以一段时间后多试几次。 这是网速不好，无法正常运行。</p>
+]]></content>
       <categories>
-          
-          <category> 说话人识别 </category>
-          
+        <category>hexo</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 说话人识别 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>RNN、 LSTM、 GRU</title>
-      <link href="/2019/03/11/RNN-LSTM-GRU/"/>
-      <url>/2019/03/11/RNN-LSTM-GRU/</url>
-      
-        <content type="html"><![CDATA[<ol><li>RNN</li></ol><p>用来连接先前的信息到当前的任务上，我们仅仅需要知道先前的信息来执行当前的任务。当相关的信息和预测的词位置之间的间隔是非常小的，RNN 可以学会使用先前的信息。</p><a id="more"></a><p>但，当前相关信息和当前预测位置之间的间隔就肯定变得相当的大。不幸的是，在这个<strong>间隔不断增大时，RNN 会丧失学习到连接如此远的信息的能力</strong>。</p><p>缺点：RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes。 （Google 《attention is all you need》提出）</p><ol start="2"><li>LSTM</li></ol><p>LSTM 通过刻意的设计来避免长期依赖问题。<strong>记住长期的信息在实践中是 LSTM 的默认行为</strong>，而非需要付出很大代价才能获得的能力！</p><p>但，LSTM的重复网络模块的结构很复杂，它实现了<strong>三个门计算，即遗忘门、输入门和输出门</strong>。</p><ol start="3"><li>GRU（Gated Recurrent Unit）</li></ol><p><strong>GRU则是LSTM的一个变体</strong>，保持了LSTM的效果，同时<strong>结构更加简单</strong>，所以它也非常流行。</p><p>GRU模型只有<strong>两个门</strong>了，分别为更新门和重置门。<strong>更新门</strong> 用于控制前一时刻的状态信息被带入到当前状态中的程度，更新门的值越大说明前一时刻的状态信息带入越多。<strong>重置门</strong> 用于控制忽略前一时刻的状态信息的程度，重置门的值越小说明忽略得越多。</p><p><strong>GRU参数更少因此更容易收敛，但是数据集很大的情况下，LSTM表达性能更好</strong>。</p><p><strong>GRU缺点：</strong>the output of GRU is always averaged to get utter level embeddings, ignoring one’s speaking style。（An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）提出） </p><p><strong>解决办法</strong>：只将GRU的<strong>最后一个输出</strong>连接到affine以获得<strong>单个话语级特征</strong>，并进一步使用ResCNN来学习判别式说话人嵌入。以这种方式，不仅捕获了顺序性质，而且在嵌入中很好地建模了光谱相关性。</p><ol start="4"><li>3D-Conv（C3D</li></ol><p>可以同时对外观和运动信息建模。</p><p>，在有限的探究框架中，<strong>所有层使用3×3×3卷积核效果最好</strong>。</p><p>15年ICCV的论文《Learning Spatiotemporal Feature with 3D Convolutional Networks》设计一种网络，把通过简单的线性分类器学到的<strong>特征称为为C3D</strong>(Convolutional 3D)，提出的C3D卷积网络是3D卷积网络的里程碑。</p><p>C3D[2]是Facebook的一个工作，它主要是把2D Convolution扩展到3D。其原理如下图，我们知道2D的卷积操作是将卷积核在输入图像或特征图（feature map）上进行滑窗，得到下一层的特征图。例如，图(a)是在一个单通道的图像上做卷积，图(b)是在一个多通道的图像上做卷积（这里的多通道图像可以指同一张图片的3个颜色通道，也指多张堆叠在一起的帧，即一小段视频），最终的输出都是一张二维的特征图，也就是说，多通道的信息被完全压缩了。而在3D卷积中，为了保留时序的信息，对卷积核进行了调整，增加了一维时域深度。如图(c)所示，3D卷积的输出仍是一个三维的特征图。因此通过3D卷积，C3D可以直接处理视频，同时利用表观特征和时序特征。<br><img src="https://upload-images.jianshu.io/upload_images/1670295-a6b18283b9811f96" alt="2D 3D -convolution"></p><p>该<strong>网络图如下</strong>：</p><p><img src="/2019/03/11/RNN-LSTM-GRU/C3D.png" alt=" C3D架构"></p><p><strong>网络图描述</strong>：该网络具有8个卷积层、5个池化层、两个全连接层，以及一个softmax输出层。所有3D卷积滤波器均为3×3×3，步长为1×1×1。为了保持早期的时间信息设置pool1核大小为1×2×2、步长1×2×2，其余所有3D池化层均为2×2×2，步长为2×2×2。每个全连接层有4096个输出单元。</p><p>下图，在UCF101数据集上（101个人类动作类别的13,320个视频），与基于循环神经网络(RNN)的方法相比，<strong>C3D性能分别优于长期循环卷积网络(LRCN)和LSTM复合模型</strong>14.1％和9.4％。C3D特征既紧凑又具有识别力。</p><p><img src="/2019/03/11/RNN-LSTM-GRU/C3D-2.png" alt="UCF101的动作识别结果"></p><p> C3D与2015年最先进的方法相比。顶部：线性SVM的简单特征; 中间：仅采用RGB帧作为输入的方法；底部：使用多个特征（如光流、密集轨迹）组合的方法。结果表明c3D结合密集轨迹和SVM分类器效果最好</p><p>–附：<br><img src="https://upload-images.jianshu.io/upload_images/9483503-e8ffa966b87f8954.png?imageMogr2/auto-orient/" alt="比较C3D与最好的公开结果。在一系列的基准上，C3D优于所有先前最好的报告方法，除了Sports-1M和UCF101。在UCF101，我们汇报了2组方法，第一组方法只使用了RGB帧作为输入，而第二组方法(括号里)使用了可能的特征(如：光流、改进的密集轨迹)"></p><p><strong>基于pytorch的c3d模型代码</strong>：<a href="https://github.com/MRzzm/action-recognition-models-pytorch" target="_blank" rel="noopener" title="下载地址">https://github.com/MRzzm/action-recognition-models-pytorch</a></p><ol start="5"><li>I3D</li></ol><p>I3D[3] 是 DeepMind 基于 C3D 作出的改进，值得一提的是 I3D 这篇文章也是发布 Kinetics数据集的文章。其创新点在于模型的权重初始化，如何将预训练好的2D ConvNets的权重赋值给3D ConvNets。具体地，将一张图像在时间维度上重复T次可以看作是一个（非常无聊的）T帧的视频，那么为了使该视频在3D结构上的输出和单帧图像在2D结构的输出相等，可以使3D卷积的权重等于2D卷积的权重重复T次，再将权重缩小T倍以保证输出一致。I3D在Kinetics数据集上进行预训练然后用于UCF101，其精度可达到98.0%。</p><ol start="6"><li>P3D<br>《learning spatio-temporal representation with pseudo-3D residual networks》ICCV2017</li></ol><p>P3D[4]是MSRA基于C3D作出的改进，基本结构是把ResNet扩展为“伪”3D卷积，“伪”3D卷积的意思是利用一个1*3*3的2D空间卷积和3*1*1的1D时域卷积来模拟常用的3*3*3的3D卷积，如下图所示。P3D在参数数量、运行速度等方面对C3D作出了优化。</p><p><img src="https://upload-images.jianshu.io/upload_images/1670295-75b36291a15b976c" alt="P3D"></p><p>GitHub链接<a href="https://github.com/ZhaofanQiu/pseudo-3d-residual-networks" target="_blank" rel="noopener" title="P3D GitHub链接">https://github.com/ZhaofanQiu/pseudo-3d-residual-networks</a></p><ol start="7"><li>Transformer<br><a href="https://blog.csdn.net/songbinxu/article/details/80332992" target="_blank" rel="noopener">attention is all you need阅读笔记</a><br>Google在2017的《Attention is all you need》，提出解决sequence to sequence问题的transformer模型，用<strong>全attention的结构代替了lstm</strong>。<br>是第一个完全基于attention的序列转换模型，代替了encoder-decoder结构的递归网络，训练效果比之前的模型好。</li></ol><p><strong>RNN（或者LSTM，GRU等）</strong>的计算限制为是顺序的，也就是说RNN相关算法只能从左向右依次计算或者从右向左依次计算，这种机制带来了<strong>两个问题</strong>：</p><p>1.时间片t的计算依赖t-1时刻的计算结果，这样<strong>限制了模型的并行能力，训练速度快</strong>；<br>2.顺序计算的过程中信息会丢失，尽管LSTM等门机制的结构一定程度上缓解了长期依赖的问题，但是对于<strong>特别长期的依赖现象</strong>,LSTM依旧无能为力。</p><p><strong>创新之处</strong>在于提出了两个新的Attention机制，分别叫做 Scaled Dot-Product Attention 和 Multi-Head Attention。</p><p><strong>局限/未来发展方向</strong>：</p><ul><li>当前仅用于文本形式的输入输出，还未使用到图像，语音，视频。</li><li>使生成顺序更少。</li></ul><p><strong>Transformer代码</strong>已经发布在TensorFlow的tensor2tensor库中。</p><ol start="8"><li>Two-Stream Network及其衍生系列(不理解)</li></ol><p>Two Stream[5]是VGG组的工作（不是UGG哦），其基本原理是训练两个ConvNets，分别对视频帧图像（spatial）和密集光流（temporal）进行建模，两个网络的结构是一样的，都是2D ConvNets，见下图。两个stream的网络分别对视频的类别进行判断，得到class score，然后进行分数的融合，得到最终的分类结果。</p><p>可以看出Two-Stream和C3D是不同的思路，它所用的ConvNets都是2D ConvNets，对时序特征的建模体现在两个分支网络的其中一支上。Two-Stream的实验结果，在UCF101上达到88.0%的准确率。</p><p>在spatial stream和temporal stream如何融合的问题上，有很多学者作出了改进。</p><ul><li><p>[6]在two stream network的基础上，利用3D Conv和3D Pooling进行spatial和temporal的融合，有点two stream + C3D的意思。另外，文章将两个分支的网络结构都换成了VGG-16。在UCF101的精度为92.5%。</p></li><li><p>TSN[7]是CUHK的工作，对进一步提高two stream network的性能进行了详尽的讨论。two stream在这里被用在视频片段（snippets）的分类上。关于two stream的输入数据类型，除去原有的视频帧图像和密集光流这两种输入外，文章发现加入warped optical flow也能对性能有所提高。在分支网络结构上尝试了GoogLeNet，VGG-16及BN-Inception三种网络结构，其中BN-Inception的效果最好。在训练策略上采用了跨模态预训练，正则化，数据增强等方法。在UCF101上达到94.2%的精度。</p></li></ul><ol start="9"><li>TDD(不理解)<br>TDD[8]是对传统的iDT[9]算法的改进（iDT算法是深度学习以前最好的行为识别算法），它将轨迹特征和two-stream network结合使用，以two-stream network作为特征提取器，同时利用轨迹对特征进行选择，获得轨迹的深度卷积描述符，最后使用线性SVM进行视频分类。TDD是一个比较成功的传统方法与深度学习算法相结合的例子，在UCF上达到90.3%的精度。</li></ol><ol start="10"><li><p>ActionVLAD(不理解)<br>ActionVLAD[10]是一种特征融合的方式，它可以融合two stream的特征，C3D的特征以及其他网络结构的特征。其思想是对原有的特征计算残差并聚类，对不同时刻的帧进行融合，得到新的特征。ActionVLAD是对视频空间维度和时间维度的特征融合，使得特征的表达更全面。</p></li><li><p>Non-local Network(不理解)<br>Non-local Network[11]是Facebook何恺明和RBG两位大神近期的工作，非局部操作（non-local operations）为解决视频处理中时空域的长距离依赖打开了新的方向。我们知道，卷积结构只能捕捉数据的局部信息，它对于非局部特征的信息传递不够灵活。Non-local Network则根据所有帧所有位置的信息对某个位置进行调整。文章把这个block加在I3D上做了实验，在Charades上精度提升2%</p></li></ol><p>scquence2senquence<br>encoder-decoder</p><blockquote><p><a href="https://blog.csdn.net/qq_28743951/article/details/78974058" target="_blank" rel="noopener">https://blog.csdn.net/qq_28743951/article/details/78974058</a><br><a href="https://blog.csdn.net/wangyangzhizhou/article/details/77332582" target="_blank" rel="noopener">https://blog.csdn.net/wangyangzhizhou/article/details/77332582</a><br><a href="https://blog.csdn.net/pipisorry/article/details/84946653" target="_blank" rel="noopener">https://blog.csdn.net/pipisorry/article/details/84946653</a><br><a href="https://www.jianshu.com/p/e416b837351d" target="_blank" rel="noopener">https://www.jianshu.com/p/e416b837351d</a><br><a href="https://www.jianshu.com/p/526e90bb2ba0" target="_blank" rel="noopener">https://www.jianshu.com/p/526e90bb2ba0</a></p></blockquote>]]></content>
-      
-      
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>action recognition 泛读</title>
+    <url>/2019/04/22/action/</url>
+    <content><![CDATA[<p>总结多篇 action recognition 的论文</p>
+<a id="more"></a>
+
+<h3 id="Large-scale-Video-Classiﬁcation-with-Convolutional-Neural-Networks-CVPR2014"><a href="#Large-scale-Video-Classiﬁcation-with-Convolutional-Neural-Networks-CVPR2014" class="headerlink" title="Large-scale Video Classiﬁcation with Convolutional Neural Networks(CVPR2014)"></a>Large-scale Video Classiﬁcation with Convolutional Neural Networks(CVPR2014)</h3><ol>
+<li><p>使用CNN拓变体，用于视频分类；</p>
+</li>
+<li><p>使用<strong>两种不同的分辨率的帧分别作为输入</strong>，输入到两个CNN中，在最后的两个全连接层将两个CNN统一起来；两个流分别是<strong>低分辨率的内容流</strong>和采用<strong>每一个帧中间部分的高分辨率流</strong>(如图1)；</p>
+</li>
+</ol>
+<p><strong>高分辨率流学习灰度，高频特征，而低分辨率流模拟较低的频率和颜色</strong>。</p>
+<p><img src="https://img-blog.csdn.net/20141008205106374?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<ol start="3">
+<li>将从自建数据库学习到的CNN结构迁移到UCF-101数据集上面。</li>
+</ol>
+<p>在考虑时间关联性方面，作者提出了四种方案(如图2)，并且进行了相关实验，实验的结果表示这四种方面都能取得很好的结果。</p>
+<p><strong>Slow Fusion网络效果最好 。</strong><br><img src="https://img-blog.csdn.net/20141008204957796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbmdfYWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt> </p>
+<ol start="4">
+<li>作者也做了关于迁移学习的实验，在迁移对为未训练的数据分类时，对最后一层softmax、最后两层softmax、整个网络分别再训练，得到了效果对比：仅训练最后两层softmax效果较好。<br><img src="/2019/04/22/action/Action_R_1-3.png" alt></li>
+</ol>
+<h3 id="Two-Stream-Convolutional-Networks-for-Action-Recognition-in-Videos（NIPS-2014）"><a href="#Two-Stream-Convolutional-Networks-for-Action-Recognition-in-Videos（NIPS-2014）" class="headerlink" title="Two-Stream Convolutional Networks for Action Recognition in Videos（NIPS 2014）"></a>Two-Stream Convolutional Networks for Action Recognition in Videos（NIPS 2014）</h3><p>阅读时间：2019年5月27日</p>
+<p> <strong>1.Multi-task learning多任务学习</strong></p>
+<p>Multi-tasklearning （多任务学习）是和single-task learning （单任务学习）相对的一种机器学习方法。拿大家经常使用的school data做个简单的对比，school data是用来预测学生成绩的回归问题的数据集，总共有139个中学的15362个学生，其中每一个中学都可以看作是一个预测任务。单任务学习就是忽略任务之间可能存在的关系分别学习139个回归函数进行分数的预测，或者直接将139个学校的所有数据放到一起学习一个回归函数进行预测。而多任务学习则看重任务之间的联系，通过联合学习，同时对139个任务学习不同的回归函数，既考虑到了任务之间的差别，又考虑到任务之间的联系，这也是多任务学习最重要的思想之一。</p>
+<p>优势：能发掘这些子任务之间的关系，同时又能区分这些任务之间的差别。比如多标签图像的分类，人脸的识别等等。</p>
+<p>方法：大致可以总结为两类，一是不同任务之间共享相同的参数（common parameter），二是挖掘不同任务之间隐藏的共有数据特征（latent feature）。</p>
+<p>时间流使用多任务训练时，不论有无空间流，效果都比单任务训练效果好。</p>
+<p><strong>2. two-stream 的连接方式</strong></p>
+<p>连接时间和空间流的方法：（1）是在两个网络的full6或full7层的顶部训练一组全连接层，但会过度拟合。（2）使用平均或线性SVM融合softmax分数</p>
+<p><img src="/2019/04/22/action/Action_R_2-1.png" alt></p>
+<p><strong>3. 两种时间流堆栈方式</strong></p>
+<p>（1）光流堆叠 Optical flow stacking ： 计算每两帧之间相同位置的光流，然后简单的stacking</p>
+<p>（2）轨迹堆叠 Trajectory stacking ： 轨迹叠加就是假设第一帧的某个像素点，我们可以通过光流来追踪它在视频中的轨迹</p>
+<p><img src="/2019/04/22/action/Action_R_2-2.png" alt></p>
+<h3 id="Learning-Spatiotemporal-Features-with-3D-Convolutional-Networks-（CVPR-2015）"><a href="#Learning-Spatiotemporal-Features-with-3D-Convolutional-Networks-（CVPR-2015）" class="headerlink" title="Learning Spatiotemporal Features with 3D Convolutional Networks##（CVPR 2015）"></a>Learning Spatiotemporal Features with 3D Convolutional Networks##（CVPR 2015）</h3><p><a href="https://github.com/facebook/C3D" target="_blank" rel="noopener">代码</a></p>
+<p>阅读时间：2019年5月28日</p>
+<p><strong>1. 问题</strong></p>
+<ul>
+<li>2D卷积对时空特征的学习不好</li>
+<li>本文将二维卷积推广到了三维，提取的特征高效、紧致、使用简单</li>
+</ul>
+<p><strong>2. 方法</strong></p>
+<ul>
+<li>用3D卷积网络，同时提取空间和时间信息</li>
+<li>All 3D convolution kernels are 3 × 3 × 3 with stride 1</li>
+<li>All pooling kernels are 2 × 2 × 2, except for pool1 is 1 × 2 × 2</li>
+<li>学习到的特征输入到线性分类器(多分类线性SVM),分类效果好</li>
+</ul>
+<p><strong>3. 收获</strong></p>
+<ul>
+<li>3D卷积更加适合学习时域空域(spatiotemporal)特征学习</li>
+<li>特征紧凑，计算效率高，易于训练和使用</li>
+</ul>
+<p><img src="/2019/04/22/action/Action_R_3-1.png" alt></p>
+<p><strong>4. C3D学到了什么？</strong></p>
+<p>观察到<strong>C3D首先关注前几帧中的appearance，并跟踪后续帧中的显着运动</strong>。Thus C3D differs from standard 2D ConvNets in that it selectively attends to both motion and appearance.</p>
+<p><strong>可以在卷积层后使用反卷积，查看网络学到了什么。</strong></p>
+<p>C3D可以很好地捕获外观和运动信息，因此与基于外观的深度特征的Imagenet结合没有任何好处。另一方面，<strong>将C3D与iDT结合起来是有益的</strong>，因为它们彼此高度互补。实际上，iDT是基于光流跟踪和低级梯度直方图的手工制作功能，而C3D则捕获高级抽象/语义信息。</p>
+<p> ** # t-SNE：可视化**，能保持局部结构的能力，高维数据空间中距离相近的点投影到低维中仍然相近。use deconvolution to project the top activations of these clips back into image space</p>
+<h3 id="Learning-Spatio-Temporal-Representation-with-Pseudo-3D-Residual-Networks-ICCV-2017-P3D"><a href="#Learning-Spatio-Temporal-Representation-with-Pseudo-3D-Residual-Networks-ICCV-2017-P3D" class="headerlink" title="Learning Spatio-Temporal Representation with Pseudo-3D Residual Networks##( ICCV 2017)  P3D"></a>Learning Spatio-Temporal Representation with Pseudo-3D Residual Networks##( ICCV 2017)  P3D</h3><p>使用的可视化代码<a href="https://github.com/auduno/deepdraw" target="_blank" rel="noopener">DeepDraw</a></p>
+<p>阅读时间：2019年5月29日</p>
+<p><strong>0. 为什么提该网络</strong></p>
+<ul>
+<li>如何更好地提取视频的空间时序特征信息对于视频内容的分析具有重要的意义；</li>
+<li>2D卷积神经网络不能很好的学习到视频的时序信息，而看起来更加合理的3D卷积神经网络却需要大量的计算量，而且需要在没有预训练参数的情况下从头开始训练；</li>
+<li>在2D Conv网络结构基础上增加pooling或者RNN的方法不能很好地提取视频的低层信息间的联系。</li>
+</ul>
+<p><strong>1. 问题</strong></p>
+<ul>
+<li>3D Convolutions对视频的时域空域特征学习更好</li>
+<li>重头训练一个深的3D CNN会消耗大量成本和内存</li>
+<li>随机初始化的三维卷积核需要大量精细标注的视频数据来进行训练</li>
+<li>本文提出基于伪三维卷积和残差学习的神经网络模块</li>
+<li>在CVPR 2017的Activity Net Challenge的Dense-Captioning任务中获得第一名</li>
+</ul>
+<p><strong>2. 方法</strong></p>
+<p><img src="https://img-blog.csdn.net/2018031910343826?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTM5ODIxNjQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="P3D 的三种变体示意图"> </p>
+<ul>
+<li>the key component in each block is a combination of one 1 × 3 × 3 convolutional layer and one layer of 3 × 1 × 1 convolutions in a parallel or cascaded fashion, that takes the place of a standard 3 × 3 × 3 convolutional layer.</li>
+<li>即 con3D = S + T = 1 × 3 × 3 + 3 × 1 × 1 如上图上部分所示</li>
+<li>其中二维卷积核可以使用图像数据进行预训练，对于已标注视频数据的需求也会大大减少</li>
+<li>P3D Blocks ：P3D-A，P3D-B，P3D-C 分别使用串行、并行和带捷径（shortcut）的串行三种方式，如上图中间部分所示</li>
+<li>P3D ResNet：三种伪三维残差单元替代ResNet中的二维残差单元，如上图下部分所示</li>
+</ul>
+<p><strong>3. 收获</strong></p>
+<ul>
+<li>以后遇到时域的数据，可以增加一个网络学习</li>
+<li>要设计非常深的网络时要借鉴残差网络的思想</li>
+<li>训练非常深的3D CNN非常困难，需要很大的计算量。更重要的是，使用Sports-1M数据集中的帧直接微调ResNet-152可以获得比从头开始训练的C3D更高的准确度</li>
+</ul>
+<p>** # TDD特征：Trajectory-pooled Deep-convolutional Descriptor**<br>结合了hand-craft features 和 deep convolutional features两种提取特征的方式，</p>
+<p>** # DeepDraw<strong>：P3D ResNet模型使用DeepDraw 来对模型学习的内容 **可视化</strong>。<a href="https://github.com/auduno/deepdraw" target="_blank" rel="noopener">https://github.com/auduno/deepdraw</a></p>
+<p>整个过程分两步：</p>
+<ul>
+<li>利用cnn学习convolutional features</li>
+<li>采用trajectory-constrained sample and pooling策略对convolutional features进行aggregate，形成descriptor。</li>
+<li>利用费舍尔矢量将这些局部的TDDs aggregate成一个全局长矢量，再用svm分类。</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>自动的学习视频特征，避免了过多的hand-craft 提取。</li>
+<li>考虑到了视频的时间特性，采用trajector-constrained sample and pooling对cnn自动学习到的特征进行aggregate。</li>
+<li>并且证明了TDD其实就是各类hand-craft的融合。（our results demonstrate that our TDDs are complementary to those hand-crafted features (HOG, HOF, and MBH) and the fusion of them is able to further boost the recognition performance.）</li>
+</ul>
+<h3 id="Attentional-Pooling-for-Action-Recognition-NIPS-2017"><a href="#Attentional-Pooling-for-Action-Recognition-NIPS-2017" class="headerlink" title="Attentional Pooling for Action Recognition (NIPS 2017)"></a>Attentional Pooling for Action Recognition (NIPS 2017)</h3><p>阅读时间：2019年6月2日</p>
+<p><a href="https://github.com/rohitgirdhar/AttentionalPoolingAction" target="_blank" rel="noopener">代码 https://github.com/rohitgirdhar/AttentionalPoolingAction</a></p>
+<p><strong>1.问题</strong></p>
+<ul>
+<li>传统一阶注意力网络大多为学习一个locations*<br>1的mask向量，向量的值代表了对应位置上的权重，但是它没有挖掘到，location之间的关系或者说是相互作用的权重</li>
+</ul>
+<p><strong>2.方法</strong></p>
+<ul>
+<li><p><strong>Attentional pooling as low-rank approximation of second-order pooling</strong><br>Second-order pooling<br><img src="/2019/04/22/action/Action_R_4-1.png" alt="Second-order pooling"></p>
+<p>Low-rank second-order pooling<br><img src="/2019/04/22/action/Action_R_4-2.png" alt="Second-order pooling"></p>
+<p>Top-down attention<br><img src="/2019/04/22/action/Action_R_4-3.png" alt="Second-order pooling"></p>
+</li>
+<li><p><strong>融合 注意力和 低阶二阶池化</strong>，引入了一种简单的注意力表达式作为低阶二阶汇集，整合自下而上的显着性和自上而下的注意力。通过 Attention pooling 层可以学到一个二阶 attention 矩阵，而不仅仅只是一个 mask 向量，然后再 conbine 二阶和一阶的 mask ，就能得到更加精确的注意力关注区域<br><img src="/2019/04/22/action/Action_R_4-4.png" alt="Second-order pooling"></p>
+</li>
+</ul>
+<p><strong># 目标检测网络</strong> <a href="https://www.cnblogs.com/skyfsm/p/6806246.html" target="_blank" rel="noopener">详细讲解</a><br>R-CNN、Fast R-CNN、Faster R-CNN</p>
+<p><strong># 空间金字塔池化</strong><br>将金字塔思想加入到CNN，实现了<strong>数据的多尺度输入</strong>。一般CNN后接全连接层或者分类器，他们都需要固定的输入尺寸，因此不得不对输入数据进行crop或者warp，这些预处理会造成数据的丢失或几何的失真。</p>
+<p>如下图所示，在卷积层和全连接层之间加入了SPP layer。此时网络的输入可以是任意尺度的，在SPP layer中每一个pooling的filter会根据输入调整大小，而SPP的输出尺度始终是固定的。<br><img src="https://images2015.cnblogs.com/blog/1093303/201705/1093303-20170504113433539-94801265.jpg" alt="金字塔SPP"></p>
+<p><strong># TSN(Temporal Segment Networks)</strong></p>
+<p>基于长范围时间结构，结合了稀疏时间采样策略来保证使用整段视频时学习得有效和高效。基于two-stream方法构建，但不同于two-stream采用单帧或者单堆帧，TSN使用从整个视频中稀疏地采样一系列短片段，每个片段都将给出其本身对于行为类别的初步预测，从这些片段的“共识”来得到视频级的预测结果。</p>
+<p><img src="https://img-blog.csdn.net/20180319152830700" alt="TSN示意图"></p>
+<p>由上图所示，一个输入视频被分为 KK 段（segment），一个片段（snippet）从它对应的段中随机采样得到。不同片段的类别得分采用段共识函数（The segmental consensus function）进行融合来产生段共识（segmental consensus），这是一个视频级的预测。然后对所有模式的预测融合产生最终的预测结果。</p>
+<p><strong># ResNet 101、 BN-Inception模型＋注意力 比较</strong></p>
+<p>两种模型在训练完整图像时表现差不多，但结合注意力后，R-101有4％的改进，I-V2不改善效果。</p>
+<p>说明两模型的主要<strong>区别</strong>：Inception-style models在输入图片的初始层通过max-pooling快速下采样，这样在后续层计算成本降低，训练更快，但是它导致大多数层具有非常大的感受野，因此后来的神经元可以有效地访问所有图像像素。这表明最后一层的所有空间特征可能非常相似。</p>
+<p>而R-101，逐渐降低空间分辨率，允许最后一层特征专注于图像的不同部分，因此更多地受益于注意力集中。<strong>输入的图片size需要稍大一些，以确保the last-layer features are sufficiently distinct to benefit from attentional pooling</strong>.</p>
+<h3 id="Temporal-Segment-Networks-Towards-Good-Practices-for-Deep-Action-Recognition-ECCV2016"><a href="#Temporal-Segment-Networks-Towards-Good-Practices-for-Deep-Action-Recognition-ECCV2016" class="headerlink" title="Temporal Segment Networks: Towards Good Practices for Deep Action Recognition (ECCV2016)"></a>Temporal Segment Networks: Towards Good Practices for Deep Action Recognition (ECCV2016)</h3><p>阅读时间：</p>
+<h3 id="TACNet-Transition-Aware-Context-Network-for-Spatio-Temporal-Action-Detection（CVPR2019）"><a href="#TACNet-Transition-Aware-Context-Network-for-Spatio-Temporal-Action-Detection（CVPR2019）" class="headerlink" title="TACNet: Transition-Aware Context Network for Spatio-Temporal Action Detection（CVPR2019）"></a>TACNet: Transition-Aware Context Network for Spatio-Temporal Action Detection（CVPR2019）</h3><p>阅读时间：2019.6.21</p>
+<p><strong>1.问题</strong></p>
+<ul>
+<li><p><strong>之前方法的缺陷</strong>：空间-时间流方法动作识别方法将视频帧视为一组独立图像，无法利用视频的时间连续性</p>
+</li>
+<li><p><strong>之前方法的缺陷</strong>：ACT虽然采用堆叠策略来利用剪辑级检测的短期时间连续性，但仍无法提取长期时间上下文信息，显著提高识别性能。</p>
+</li>
+<li><p><strong>该网络克服的问题</strong>：提取长期时间背景信息，区分过渡状态，提出a common and differential mode scheme to accelerate the convergence of TACNet。</p>
+</li>
+</ul>
+<p><strong>2.方法</strong></p>
+<ul>
+<li><p>提出转换感知上下文网络（TACNet）包括两个主要组件，即时间上下文检测器和转换感知分类器。</p>
+</li>
+<li><p><strong>时间上下文检测器</strong>可以通过构建循环网络（standard SSD framework, but can encode the long-term context information by embedding several multi-scale Bi-directional Conv-LSTM units）来提取具有恒定时间复杂度的长期上下文信息。</p>
+</li>
+<li><p>转变感知分类器可以通过同时分类动作和过渡状态来进一步区分过渡状态。因此，所提出的TACNet可以显着改善时空行为检测的性能</p>
+</li>
+<li><p>将Bi-ConvLSTM单元嵌入到SSD框架中以设计循环检测器。作为一种LSTM，ConvLSTM可以编码长期信息，更适合处理视频等时空数据。</p>
+</li>
+</ul>
+<p><strong>3.收获</strong></p>
+<p><strong>#</strong> SSD、ACT、Con-LSTM</p>
+<p>-ACT detector：分析视频序列，检测某些动作发生的时空位置（起止时间和每一帧视频中的发生位置），即spatio-temporal action localization。</p>
+<p>步骤：1.将每一帧的视频按照时序输入到SSD网络； 2.将SSD网络中的各层特征图按照STACK排列，简单说就是，将各层特征按照，同层特征横向排列，不同层特征纵向排列。这样就将各层的特征按照时序组织起来了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1564401-38737505893bae67.png" alt="ACT-detector网络结构"></p>
+<ul>
+<li>SSD网络：目标检测</li>
+</ul>
+<hr>
+<h2 id="3D-data"><a href="#3D-data" class="headerlink" title="3D data"></a><center>3D data</center></h2><h3 id="Describing-Local-Reference-Frames-for-3-D-Motion-Trajectory-Recognition-IEEE-access-2018"><a href="#Describing-Local-Reference-Frames-for-3-D-Motion-Trajectory-Recognition-IEEE-access-2018" class="headerlink" title="Describing Local Reference Frames for 3-D Motion Trajectory Recognition(IEEE access 2018)"></a>Describing Local Reference Frames for 3-D Motion Trajectory Recognition(IEEE access 2018)</h3><p>阅读时间：2019.6.17</p>
+<p><strong>1. 问题</strong></p>
+<ul>
+<li><p>运动轨迹的原始数据或绘制简单的几何量不能表征3D点的方向变化。</p>
+</li>
+<li><p>高阶导数是3D点轨迹的一种完整描述符，可表示点的位置和方向变化，但对轨迹中的噪声敏感。</p>
+</li>
+</ul>
+<p><strong>2. 方法</strong></p>
+<ul>
+<li><p><strong>使用弗莱纳(Frenet–Serret)公式(切向量t;  法向量n;  正常向量b)表示3D运动轨迹</strong></p>
+</li>
+<li><p><strong>欧拉旋转定理 + 平方根速度矢量 作为 descriptor</strong></p>
+</li>
+<li><p><strong>Fisher Vector作为输入</strong>：Fisher kernels对输入向量进行了编码，以一个新的梯度向量来表示原输入向量，这个新的梯度向量就是Fisher Vector。这样编码的好处在于可以<strong>将任意长度的输入向量转换成定长向量</strong></p>
+</li>
+</ul>
+<p><strong>3. 收获</strong></p>
+<p>-<strong>使用向量表示3D运动轨迹</strong>，G(t)={x(t),y(t),z(t),t是时间</p>
+<p>轨迹用弗莱纳(Frenet–Serret)公式(切向量t;  法向量n;  正常向量b)表示<br><img src="/2019/04/22/action/Action_R_5-1.png" alt><br><img src="/2019/04/22/action/Action_R_5-2.png" alt></p>
+<ul>
+<li><strong>识别效果不如最好的实验，理由</strong>：1、我们只使用了唇部的数据，而其他的数据使用了整个脸部的数据；2、使用的160个唇部深度数据比RGB整个脸部或唇部图片小很多，训练速度快，占用内存少。</li>
+<li><strong>提出</strong>了一种<strong>运动轨迹描述方法</strong>，在沿运动轨迹的每个点都用descriptor表示，描述了运动的方向</li>
+<li>可以<strong>把descriptor 和原始数据拼接</strong>后放入神经网络；或分别用底层神经网络提取特征后在融合训练。</li>
+</ul>
+<p>** # 其他的3D数据描述方式 **</p>
+<p>微分不变量、积分不变量、SRVF、多尺度SSM、3D形状背景、LRFb<br><img src="/2019/04/22/action/Action_R_5-3.png" alt></p>
+<p>16年Convolutional Two-Stream Network Fusion for Video Action Recognition<br>此论文有公开源代码，用的是MATLAB。</p>
+<p>17年Hidden Two-Stream Convolutional Networks for Action Recognition<br>此论文有公开源代码，用的是Caffe。</p>
+<h1 id="可以尝试"><a href="#可以尝试" class="headerlink" title="可以尝试"></a>可以尝试</h1><p>C3D、 P3D、 attention</p>
+<p>弗莱纳(Frenet–Serret)公式</p>
+]]></content>
       <categories>
-          
-          <category> 机器学习 </category>
-          
+        <category>action recognition</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 机器学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>action recognition 实现方式总结</title>
-      <link href="/2019/02/25/action-recognition-2/"/>
-      <url>/2019/02/25/action-recognition-2/</url>
-      
-        <content type="html"><![CDATA[<ol><li>早期尝试<br>Large-scale Video Classiﬁcation with Convolutional Neural Networks(2014)</li></ol><p>GitHub：<a href="https://cs.stanford.edu/people/karpathy/deepvideo/" target="_blank" rel="noopener">https://cs.stanford.edu/people/karpathy/deepvideo/</a></p><a id="more"></a><p>2DCNN, 能不能自动的捕捉运动信息?</p><ul><li><p>single frame</p></li><li><p>stacked frames</p></li></ul><ol start="2"><li><p>双流法<br>Two-Stream Convolutional Networks for Action Recognition in Videos(2014)<br>双流架构:</p><ul><li><p>空域网络(spatial networks)  执行物体识别</p></li><li><p>时域网络(temporal networks)  识别运动信息</p></li></ul></li></ol><p>TSN: Temporal Segment Networks: Towards Good Practices for Deep Action Recognition(2016)</p><ol start="3"><li><p>(光流的作用)<br>On the Integration of Optical Flow and Action Recognition(2017) (2018CVPR)</p></li><li><p>C3D<br>Learning Spatiotemporal Features with 3D Convolutional Networks(2015)</p></li><li><p>I3D(Two-Stream Inﬂated 3D ConvNet)<br>Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset</p></li></ol><p><a href="https://blog.csdn.net/whfshuaisi/article/details/79116265" target="_blank" rel="noopener" title="action recognition论文汇总">action recognition论文汇总</a></p>]]></content>
-      
-      
+      <tags>
+        <tag>action recognition</tag>
+        <tag>skeleton</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>说话人识别</title>
+    <url>/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/</url>
+    <content><![CDATA[<p>多篇说话人识别论文总结</p>
+<a id="more"></a>
+
+
+<center>An End-to-End Text-Independent Speaker Identification System on Short Utterances（interspeech 2018）</center>
+
+<p>将话语映射到说话人身份子空间，其中说话者的相似性可以通过欧几里德距离来测量<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/speakeridentificationsystem.png" alt="speaker identification system"><br>注：<strong>speaker embedding是指唯一确定的0-1一维向量</strong>，属于目标人是1（唯一），向量其余元素是0</p>
+<p>注：i-vector是声纹说话人识别中的说话人矢量<br><a href="https://blog.csdn.net/weixin_38206214/article/details/81096092" target="_blank" rel="noopener">i-vector<br>讲解博客</a></p>
+<p>采用 GRU 来提取时间话语级别的特征，以保留一个人的说话风格。 然后，训练ResCNN模型来对说话人进行鲁棒嵌入。 最后，整个系统（包括GRU和ResCNN）通过使用所提出的损失函数联合优化，称为speaker identity subspace loss </p>
+<ol>
+<li><p><strong>数据输入</strong>：968个发言者，35,983句话，约27个小时的中文普通话发音。 每个人有大约37个话语，其持续时间大多在2到5秒左右。 通过随机选择100个说话者作为测试集，其他作为训练集。<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/1-1.png" alt="Data sets描述"></p>
+</li>
+<li><p><strong>GRU提取 utterance-level feature；</strong> contains more speaker characteristics</p>
+</li>
+</ol>
+<p><strong>提出GRU缺点</strong>： the output of GRU is always averaged to get utter level embeddings, ignoring one’s speaking style。<strong>解决办法</strong>：只将GRU的<strong>最后一个输出</strong>连接到affine以获得<strong>单个话语级特征</strong>，并进一步使用ResCNN来学习判别式说话人嵌入。以这种方式，不仅捕获了顺序性质，而且在嵌入中很好地建模了光谱相关性。</p>
+<ol start="3">
+<li><p><strong>ResCNN 假设一个“不同的话语”可以被视为理想说话者身份子空间中单个对象的变换。基于此假设，利用残差卷积神经网络（ResCNN）架构对变换进行建模</strong></p>
+</li>
+<li><p><strong>the speaker identity subspace loss</strong> significantly improves the discriminative ability of our system</p>
+</li>
+</ol>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/2-1.png" alt="speaker verification identity subspace loss"><br>  注：hp, hq 是说话者p ,q的身份向量。 Rpq是说话者p,q的声音距离关系</p>
+<p><strong>实验结果表明</strong>：<br>   该端到端系统性能更好，并且提出的说话者身份子空间丢失使得说话人身份嵌入更具辨别力。</p>
+<p>同时，实验对比指出：</p>
+<ol>
+<li><strong>话语时长5s足以训练短时说话人识别系统</strong>。 此外，持续时间较长可能会带来进一步改善，但也带来冗余。</li>
+<li><strong>每个人说 3-5 句话是比较合适的</strong>。</li>
+</ol>
+<hr>
+<center>Generalized End-to-End Loss for Speaker Verification</center>
+ Google 投 ICASSP2018
+
+
+<p>GE2E:具有新损失函数GE2E的模型通过将训练时间减少&gt; 60％，在更短的时间内将EER降低10％以上，从而学习更好的模型</p>
+<p>先前工作背景：Tuple-Based End-to-End Loss（TE2E）<br><strong>TE2E原理（还没做）</strong></p>
+<ol>
+<li>数据输入</li>
+</ol>
+<p>GE2E的训练数据基于一次性的大数据量的语句，一个batch包含N个人，M句话/人。（Xji代表j说话者的第i句话）<br><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-1.png" alt="数据输入"></p>
+<ol start="2">
+<li>GE2E的损失函数</li>
+</ol>
+<p>features extracted from each utterance xji——&gt;LSTM network——&gt;a linear layer——&gt;output:f(xji,w)<br>注：w是LSTM和linear layer的参数</p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-3.png" alt="embedding vector表达式"></p>
+<p>eji（正则化后的vector） represents the embedding vector of the jth speaker’s ith utterance</p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-4.png" alt="相似矩阵Sji,k表达式"></p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-2.png" alt="cos(a,b)解释"></p>
+<p>损失函数的两种算法</p>
+<ul>
+<li>softmax</li>
+</ul>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-5.png" alt="softmax的loss函数"></p>
+<ul>
+<li><p>contrast</p>
+<p><img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-6.png" alt="相似矩阵Sji,k表达式"><br>正项对应于朝向cj（蓝色三角形）推动eji（蓝色圆圈）。 负项对应于拉动eji（蓝色圆圈）远离ck（红色三角形），因为ck与ck0相比更像eji。 因此，对比度损失使我们能够专注于困难的嵌入向量和负质心对。</p>
+</li>
+<li><p>两种损失函数比较：（1）两种函数都有用；（2）contrast损失对于td-sv表现更好，而softmax损失对于ti-sv表现稍好。</p>
+</li>
+</ul>
+<p>注：在计算真实说话者的质心时移除eji使得训练稳定并有助于避免琐碎的解决方案。 因此，在计算负相似性时仍使用公式1（即k != j），但我们在k = j时使用公式8</p>
+<p>综上所述：</p>
+<p> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-7.png" alt></p>
+<ol start="3">
+<li>TE2E、GE2E比较</li>
+</ol>
+<p><strong>a single batch in GE2E loss update</strong>: have N speakers,<br>each with M utterances. Each single step update will push all N×M embedding vectors toward their own centroids, and pull them away the other centroids.</p>
+<p> all possible tuples in the** TE2E loss function** for each xji.（没看懂）</p>
+<p>each update for xji in our GE2E loss is identical to at least 2(N − 1) steps in our TE2E loss，所以，GE2E比TE2E训练次数更少，更有效率。</p>
+<ol start="4">
+<li>Training with MultiReader<br>利用多个不同的数据源来做。为每个数据源的损失函数设置不同的权重，权重越高该数据源越重要；求所有数据源的损失函数的加权和。</li>
+</ol>
+<p>5.1 Text-Dependent Speaker Verification实验</p>
+<p><strong>训练数据</strong>有两个，（1）是 150M 句话 630K 说话者的“OK Google”<br> （2）是共 1.2M 句 18K 说话者的 “OK/Hey Google” 。第一个数据库比第二个大很多。</p>
+<p><strong>Table1 测试数据</strong>： 665 speakers with an average of 4.5 enrollment utterances and 10 evaluation utterances per speaker</p>
+<p><strong>Table2 测试数据</strong>：83 K different speakers and environmental conditions, from both anonymized logs and manual collections. We use an average of 7.3 enrollment utterances and 5 evaluation utterances per speaker.（<strong>the GE2E model took about 60% less training time than TE2E</strong>）</p>
+<p><strong>测试结果</strong><br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-8.png" alt><br>注：The baseline model is a single layer LSTM with 512 nodes and an embedding vector size of 128 [13]. The second and third rows’ model architecture is 3-layer LSTM.</p>
+<p>5.2 Text-Independent Speaker Verification实验<br> <strong>数据预处理</strong>divide training utterances into smaller segments, which we refer to as partial utterances. 不要求所有partial utterances具有相同的长度，但同一batch中的partial utterances所有必须具有相同的长度为t帧（140&lt;=t&lt;=180）.<br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-9.png" alt></p>
+<p><strong>滑动窗口的处理</strong>for every utterance we apply a sliding window of fixed size (140 + 180)/2 = 160 frames with 50% overlap.<br>We compute the d-vector for each window. The final utterance-wise d-vector is generated by L2 normalizing the window-wise d-vectors, then taking the element-wise averge (as shown in Figure 4)</p>
+<p><strong>训练数据</strong>：36M utterances from 18K speakers</p>
+<p><strong>测试数据</strong>：1K speakers with in average 6.3 enrollment utterances and 7.2 evaluation utterances per speaker</p>
+<p><strong>测试结果</strong></p>
+<p>GE2E training was about 3× faster than the other loss functions。<br> <img src="/2019/04/01/%E8%AF%B4%E8%AF%9D%E4%BA%BA%E8%AF%86%E5%88%AB/3-10.png" alt></p>
+<ol start="6">
+<li>论文总结</li>
+</ol>
+<ul>
+<li><p>提出了GE2E损失函数，该函数正确率高，且所需训练时间短。</p>
+</li>
+<li><p>引入了MultiReader技术来组合不同的数据源，使模型能够支持多个关键字和多种语言。</p>
+</li>
+<li><p>针对不同长度的utterance提出了切分的想法。</p>
+</li>
+</ul>
+]]></content>
       <categories>
-          
-          <category> action recognition </category>
-          
+        <category>说话人识别</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> action recognition </tag>
-            
-            <tag> skeleton </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-  
-  
+      <tags>
+        <tag>说话人识别</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【面试】 shopee面试</title>
+    <url>/2020/07/20/shopee%E6%B5%8B%E8%AF%95%E4%B8%80%E9%9D%A2/</url>
+    <content><![CDATA[<h3 id="测试岗一面"><a href="#测试岗一面" class="headerlink" title="测试岗一面"></a>测试岗一面</h3><ol>
+<li>tcp的三次握手 四次挥手（很细节）</li>
+<li>在线编程题</li>
+<li>url输入浏览器之后发生了什么</li>
+<li>测试基本知识</li>
+<li>数据库的索引</li>
+<li>一个测试用例题 （购物界面）</li>
+</ol>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WPF中Application.Resources和Window.Resources</title>
+    <url>/2018/11/20/WPF%E4%B8%ADApplication-Resources%E5%92%8CWindow-Resources/</url>
+    <content><![CDATA[<p>Application.Resources中的资源在整个项目中都可以使用。</p>
+<p>Window.Resources中的资源只在当前窗口中使用。</p>
+<p>Grid.Resources它的作用范围就是在Grid容器里的所有子控件有效,也只有这些只控件才能引用/调用这些资源</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>WPF的Window窗体加载的时候的事件的执行顺序</title>
+    <url>/2018/10/20/WPF%E7%9A%84Window%E7%AA%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E7%9A%84%E6%97%B6%E5%80%99%E7%9A%84%E4%BA%8B%E4%BB%B6%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/</url>
+    <content><![CDATA[<p>Window.Initialized</p>
+<p>Window.Activatied</p>
+<p>Window.Loaded</p>
+<p>Window.ContentRendered</p>
+<p>Window.DeActivatied</p>
+<p>Window.Closing</p>
+<p>Window.UnLoad</p>
+<p>Window.Closed</p>
+<p>注意 ：Window.Activatied可能会与Window.DeActivatied 切换多次(窗体切换的时候发生)</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>c#wpf--x命名空间</title>
+    <url>/2018/11/19/c-wpf-x%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4/</url>
+    <content><![CDATA[<p>x名称空间里的成员是专门为XAML编译器看的，用来引导XAML编译器把XAML编译成CLR代码，因此x是XAML的首字母。</p>
+<p>x名称空间中的Attribute：</p>
+<p>x:Class，用来告诉XAML编译器把XAML标签的编译结果与后台代码的哪个类合并，只能用于根节点，并且根节点的类型要与后台代码的类保持一致。</p>
+<p>x:Name，用来告诉XAML编译器把创建的对象指向到指定的变量名，这样可以直接在代码中引用该对象。如果标签具有Name属性，同时把Name属性赋值为x:Name指定的值。为了增强代码的统一性，全部使用x:Name来指定对象的变量名。</p>
+<p>x:Key，为资源字典指定key值，在XAML中通过StaticResource标记扩展进行资源检索时使用，并且可以自动向父级元素检索并一直递归直到找到该资源或到达Application。</p>
+<p>x:Type，类型为TypeExtension的标记扩展，用来在XAML中指定Type类型，与C#中的typeof关键字类似。x:Type的默认参数为类型，如{x:Type local:MyWindow}或{x:Type TypeName=local:MyWindow}。</p>
+]]></content>
+  </entry>
 </search>
