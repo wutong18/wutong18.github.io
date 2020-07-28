@@ -662,7 +662,7 @@
   <entry>
     <title>【面试】 shopee面试</title>
     <url>/2020/07/20/shopee%E6%B5%8B%E8%AF%95%E4%B8%80%E9%9D%A2/</url>
-    <content><![CDATA[<h3 id="测试岗一面"><a href="#测试岗一面" class="headerlink" title="测试岗一面"></a>测试岗一面</h3><ol>
+    <content><![CDATA[<h3 id="测试岗一面-（52分钟）"><a href="#测试岗一面-（52分钟）" class="headerlink" title="测试岗一面 （52分钟）"></a>测试岗一面 （52分钟）</h3><ol>
 <li>tcp的三次握手 四次挥手（很细节）</li>
 <li>在线编程题</li>
 <li>url输入浏览器之后发生了什么</li>
@@ -670,7 +670,16 @@
 <li>数据库的索引</li>
 <li>一个测试用例题 （购物界面）</li>
 </ol>
-]]></content>
+<p>和一面间隔一周</p>
+<h3 id="测试岗二面-（30分钟）"><a href="#测试岗二面-（30分钟）" class="headerlink" title="测试岗二面 （30分钟）"></a>测试岗二面 （30分钟）</h3><ol>
+<li>自我介绍</li>
+<li>介绍做过的项目（简历）</li>
+<li>用过什么数据库，讲一下MySQL</li>
+<li>数据库的事务，事物的四个特性</li>
+<li>一个测试用例题（一张纸）</li>
+</ol>
+<p>间隔不到一周</p>
+<h3 id="HR面"><a href="#HR面" class="headerlink" title="HR面"></a>HR面</h3>]]></content>
       <categories>
         <category>面试</category>
       </categories>
@@ -710,5 +719,38 @@
 <p>x:Key，为资源字典指定key值，在XAML中通过StaticResource标记扩展进行资源检索时使用，并且可以自动向父级元素检索并一直递归直到找到该资源或到达Application。</p>
 <p>x:Type，类型为TypeExtension的标记扩展，用来在XAML中指定Type类型，与C#中的typeof关键字类似。x:Type的默认参数为类型，如{x:Type local:MyWindow}或{x:Type TypeName=local:MyWindow}。</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>跟谁学测开面试</title>
+    <url>/2020/07/28/%E8%B7%9F%E8%B0%81%E5%AD%A6%E6%B5%8B%E5%BC%80%E9%9D%A2%E8%AF%95/</url>
+    <content><![CDATA[<h3 id="一面-2020-7-28-一个半小时"><a href="#一面-2020-7-28-一个半小时" class="headerlink" title="一面 2020.7.28 (一个半小时)"></a>一面 2020.7.28 (一个半小时)</h3><ol>
+<li>自我介绍</li>
+<li>职业规划（？？）<br>我才一面不知道为什么被问这个，黑人问号脸！！</li>
+<li>你理解的测试和开发的区别</li>
+<li>你理解的测开和测试的区别</li>
+<li>讲讲你自学的测试基础<ul>
+<li>单元测试、集成测试、系统测试、验收测试、回归测试； </li>
+<li>测试的V、W模型。</li>
+</ul>
+</li>
+<li>你认为测开人员需要具备的能力。</li>
+<li>测试实例包括哪些指标。</li>
+<li>接触过哪些测试工具。</li>
+<li>http状态码（400）</li>
+<li>TCP、UDP</li>
+<li>线程、进程、协程</li>
+<li>一个代码题（和字典、树有关）</li>
+<li>智力题（八个球，其中一个重量轻，给一个天平，两次找到该球）</li>
+<li>shell (查看Linux磁盘使用情况)</li>
+<li>SQL语句 （有点难）</li>
+<li>校园经历情况</li>
+</ol>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+      </tags>
   </entry>
 </search>
