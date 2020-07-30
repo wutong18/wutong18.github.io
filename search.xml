@@ -683,6 +683,7 @@
 <li>自我介绍（记得说毕业时间）</li>
 <li>深圳、公司的看法</li>
 <li>本科、研究生学习经历</li>
+<li>如何看待开发和测试的关系</li>
 <li>遇到过什么困难，如何解决的，有什么收获</li>
 <li>现在的校招情况，有哪些offer</li>
 <li>反问环节</li>
@@ -753,6 +754,28 @@
 <li>shell (查看Linux磁盘使用情况)</li>
 <li>SQL语句 （有点难）</li>
 <li>校园经历情况</li>
+</ol>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>字节测试岗（游戏岗）面试</title>
+    <url>/2020/07/30/%E5%AD%97%E8%8A%82%E6%B5%8B%E8%AF%95%E5%B2%97%E9%9D%A2%E8%AF%95/</url>
+    <content><![CDATA[<h3 id="一面（一个小时）"><a href="#一面（一个小时）" class="headerlink" title="一面（一个小时）"></a>一面（一个小时）</h3><ol>
+<li>自我介绍</li>
+<li>聊项目，面试小哥哥说对哪个更熟，就聊哪个</li>
+<li>算法题（括号匹配）</li>
+<li>测试实例，对括号匹配有哪些需要测试的</li>
+<li>TCP三次握手，如果只有两次会怎么样</li>
+<li>联合聚类的实现原理还是实现底层（记不太清了）</li>
+<li>聚集索引、非聚集索引</li>
+<li>路由器和交换机在哪层</li>
+<li>数据库count两种写法的区别（不会，题也没记住）<br>大概是1 * PrimaryKey count 与 count??? （记不清了）</li>
 </ol>
 ]]></content>
       <categories>
