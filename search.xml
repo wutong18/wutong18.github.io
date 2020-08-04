@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>快手测开面试</title>
+      <link href="/2020/08/04/%E5%BF%AB%E6%89%8B%E6%B5%8B%E5%BC%80%E9%9D%A2%E8%AF%95/"/>
+      <url>/2020/08/04/%E5%BF%AB%E6%89%8B%E6%B5%8B%E5%BC%80%E9%9D%A2%E8%AF%95/</url>
+      
+        <content type="html"><![CDATA[<h3 id="一面（一个小时）"><a href="#一面（一个小时）" class="headerlink" title="一面（一个小时）"></a>一面（一个小时）</h3><ol><li>python的数据类型有哪些，元组、列表和字典的区别。</li><li>你知道的网络协议有哪些？</li><li>发邮件用到的什么协议，怎么实现？</li><li>session、 cookie。</li><li>http的请求方法有？</li><li>get和post的区别？修改用户名和密码应该用哪个？</li><li>TCP、 UDT</li><li>索引，聚集索引B+树。</li><li>算法题（K个一组反转链表）</li></ol>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>字节测试岗（游戏岗）面试</title>
       <link href="/2020/07/30/%E5%AD%97%E8%8A%82%E6%B5%8B%E8%AF%95%E5%B2%97%E9%9D%A2%E8%AF%95/"/>
       <url>/2020/07/30/%E5%AD%97%E8%8A%82%E6%B5%8B%E8%AF%95%E5%B2%97%E9%9D%A2%E8%AF%95/</url>
